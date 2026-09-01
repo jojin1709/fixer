@@ -5,6 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fixer — Compress images & build PDFs, right in your browser</title>
 <meta name="description" content="Shrink photos and turn them into a PDF without uploading a single byte. Everything runs in your browser.">
+<meta name="theme-color" content="#15161a">
+
+<!-- Favicon & PWA -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="canonical" href="https://jojin1709.github.io/fixer/">
+
+<!-- Open Graph / Facebook / Discord / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jojin1709.github.io/fixer/">
+<meta property="og:title" content="Fixer — In-Browser Image Compressor & PDF Builder">
+<meta property="og:description" content="Shrink photos, batch convert, and build PDFs instantly in your browser. 100% private & client-side.">
+<meta property="og:image" content="favicon.svg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fixer — In-Browser Image Compressor & PDF Builder">
+<meta name="twitter:description" content="Shrink photos, batch convert, and build PDFs instantly in your browser. 100% private & client-side.">
+<meta name="twitter:image" content="favicon.svg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,11 +34,22 @@
 
 <div class="sprocket-rail" aria-hidden="true"></div>
 
+<!-- Live announcer for accessibility -->
+<div id="liveAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Toast notification stack -->
+<div id="toastContainer" class="toast-container" aria-live="assertive" aria-atomic="false"></div>
+
 <header class="site-head">
   <div class="wrap head-row">
-    <a class="logo" href="#top">
-      <span class="logo-mark">◐</span> Fixer
-    </a>
+    <div class="brand-group">
+      <a class="logo" href="#top">
+        <span class="logo-mark">◐</span> Fixer
+      </a>
+      <span class="savings-badge" id="savingsBadge" title="Lifetime client-side savings stored on this device">
+        ⚡ 0 B saved locally
+      </span>
+    </div>
     <p class="tag">develops in your browser · nothing leaves your device</p>
   </div>
 </header>
@@ -42,21 +73,40 @@
 
   <section class="workspace wrap" id="workspace">
 
-    <div class="dropzone" id="dropzone">
-      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" multiple hidden>
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload photos by dropping files or pressing Enter">
+      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp, image/heic, image/heif, .heic, .heif" multiple hidden>
       <div class="dz-inner">
         <p class="dz-title">Drag photos onto the light table</p>
         <p class="dz-sub">or</p>
         <button type="button" class="btn btn-primary" id="browseBtn">Choose files</button>
-        <p class="dz-note">JPG, PNG or WebP. Processed one at a time, locally.</p>
+        <p class="dz-note">JPG, PNG, WebP or iPhone HEIC. Processed locally.</p>
       </div>
     </div>
 
     <div class="controls" id="controls" hidden>
-      <div class="control-group">
+      <div class="control-tabs">
+        <button type="button" class="tab-btn active" id="modeQualityBtn" data-mode="quality">Quality Mode</button>
+        <button type="button" class="tab-btn" id="modeTargetBtn" data-mode="target">Target Size Mode</button>
+      </div>
+
+      <!-- Mode 1: Quality % -->
+      <div class="control-group" id="groupQuality">
         <label for="quality">Compression <span id="qualityValue">70%</span></label>
-        <input type="range" id="quality" min="10" max="95" value="70" step="5">
+        <input type="range" id="quality" min="10" max="95" value="70" step="5" aria-label="Compression quality percentage">
         <p class="control-hint">Lower = smaller file, more visible loss.</p>
+      </div>
+
+      <!-- Mode 2: Target File Size (Binary Search) -->
+      <div class="control-group" id="groupTarget" hidden>
+        <label for="targetSize">Target file size</label>
+        <div class="target-input-row">
+          <input type="number" id="targetSize" min="10" max="50000" value="300" step="10" aria-label="Target file size amount">
+          <select id="targetUnit" aria-label="Target file size unit">
+            <option value="KB" selected>KB</option>
+            <option value="MB">MB</option>
+          </select>
+        </div>
+        <p class="control-hint">Binary-searches quality to fit closest target size.</p>
       </div>
 
       <div class="control-group">
@@ -85,11 +135,25 @@
         <button type="button" class="btn btn-ghost" id="makePdfBtn" disabled>Stack into PDF</button>
         <button type="button" class="btn btn-text" id="clearBtn">Clear roll</button>
       </div>
+
+      <!-- Batch Progress Bar -->
+      <div class="batch-progress" id="batchProgress" hidden>
+        <div class="batch-progress-info">
+          <span id="batchProgressText">Developing photos...</span>
+          <span id="batchProgressPct">0%</span>
+        </div>
+        <div class="batch-progress-track">
+          <div class="batch-progress-fill" id="batchProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
     </div>
 
     <div class="contact-sheet" id="contactSheet" hidden>
       <div class="sheet-head">
-        <h2>Contact sheet</h2>
+        <div>
+          <h2>Contact sheet</h2>
+          <p class="sheet-hint">💡 Drag and drop frame cards to reorder pages for PDF stack.</p>
+        </div>
         <p class="sheet-summary" id="sheetSummary"></p>
       </div>
       <div class="frames" id="frames"></div>
@@ -104,21 +168,21 @@
         <span class="step-no">01</span>
         <div>
           <h3>Load</h3>
-          <p>Drop in any number of JPG, PNG or WebP photos. They stay on your machine — nothing is sent anywhere.</p>
+          <p>Drop in any number of JPG, PNG, WebP, or iPhone HEIC photos. They stay on your machine — nothing is sent anywhere.</p>
         </div>
       </li>
       <li>
         <span class="step-no">02</span>
         <div>
           <h3>Set the exposure</h3>
-          <p>Pick a quality level and, optionally, a max width. The browser's own canvas does the re-encoding.</p>
+          <p>Pick a quality level or set an exact target KB size. The browser's canvas does the re-encoding locally.</p>
         </div>
       </li>
       <li>
         <span class="step-no">03</span>
         <div>
           <h3>Pull the prints</h3>
-          <p>Download each photo, grab the whole batch as a .zip, or stack every frame into a single PDF.</p>
+          <p>Download individually, compare original vs fixed side-by-side, grab a .zip, or reorder & stack into a PDF.</p>
         </div>
       </li>
     </ol>
@@ -126,12 +190,43 @@
 
 </main>
 
+<!-- Before / After Compare Modal -->
+<div class="compare-modal" id="compareModal" hidden role="dialog" aria-modal="true" aria-labelledby="compareTitle">
+  <div class="compare-dialog">
+    <div class="compare-header">
+      <div>
+        <h3 id="compareTitle">Compare Original vs Developed</h3>
+        <p class="compare-meta" id="compareMeta"></p>
+      </div>
+      <button type="button" class="btn-close" id="closeCompareBtn" aria-label="Close compare dialog">✕</button>
+    </div>
+    <div class="compare-stage" id="compareStage">
+      <div class="compare-view-before">
+        <img id="compareBeforeImg" alt="Original photo">
+        <span class="compare-badge badge-before">Original</span>
+      </div>
+      <div class="compare-view-after" id="compareAfterWrap">
+        <img id="compareAfterImg" alt="Compressed photo">
+        <span class="compare-badge badge-after">Developed</span>
+      </div>
+      <div class="compare-slider-line" id="compareSliderLine">
+        <div class="compare-slider-thumb">↔</div>
+      </div>
+    </div>
+    <div class="compare-footer">
+      <span class="compare-instruction">Drag slider or move mouse over image to compare</span>
+      <button type="button" class="btn btn-ghost" id="compareDoneBtn">Close</button>
+    </div>
+  </div>
+</div>
+
 <footer class="site-foot">
   <div class="wrap foot-row">
-    <p>Fixer processes everything locally in your browser. No files are uploaded.</p>
+    <p>Fixer processes everything locally in your browser. No files are uploaded. Installable PWA with full offline support.</p>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
 <script src="js/app.js" defer></script>
