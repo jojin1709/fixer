@@ -1033,6 +1033,7 @@ input[type="number"]:focus, select:focus {
 }
 
 .proof-card {
+  --proof-split: 50%;
   background: var(--ink-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1043,7 +1044,6 @@ input[type="number"]:focus, select:focus {
 }
 
 .proof-stage {
-  --proof-split: 50%;
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -1137,39 +1137,48 @@ input[type="number"]:focus, select:focus {
 .proof-bar {
   display: flex;
   align-items: stretch;
-  background: #23252b;
+  background: #1c1d22;
   font-family: var(--font-display);
   font-size: 0.88rem;
   font-weight: 700;
   border-top: 1px solid var(--line);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  cursor: ew-resize;
 }
 
 .proof-stat-left {
-  flex: 1;
+  width: var(--proof-split, 50%);
+  min-width: 0;
+  box-sizing: border-box;
   padding: 14px 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   color: #e5e3dc;
   background: #1c1d22;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .proof-stat-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
   color: var(--text-mid);
   font-size: 1.1rem;
-  background: #1c1d22;
+  padding-left: 12px;
 }
 .proof-stat-right {
-  flex: 1;
+  width: calc(100% - var(--proof-split, 50%));
+  min-width: 0;
+  box-sizing: border-box;
   padding: 14px 20px;
   display: flex;
   align-items: center;
   gap: 8px;
   background: #ff5544;
   color: #ffffff;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .proof-stat-right .stat-saved {
   font-size: 0.8rem;

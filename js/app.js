@@ -1288,18 +1288,26 @@
 
   // ---- Visual Proof Showcase Slider ----
   function initVisualProofSlider() {
+    const proofCard = document.querySelector('.proof-card');
     const proofStage = document.getElementById('proofStage');
-    if (!proofStage) return;
+    const proofBar = document.getElementById('proofBar');
+    if (!proofStage || !proofCard) return;
 
     proofStage.addEventListener('dragstart', (e) => e.preventDefault());
     proofStage.addEventListener('selectstart', (e) => e.preventDefault());
+    if (proofBar) {
+      proofBar.addEventListener('dragstart', (e) => e.preventDefault());
+      proofBar.addEventListener('selectstart', (e) => e.preventDefault());
+    }
 
     function setProofSplit(pct) {
       const clamped = Math.max(0, Math.min(100, pct));
-      proofStage.style.setProperty('--proof-split', `${clamped}%`);
+      proofCard.style.setProperty('--proof-split', `${clamped}%`);
     }
 
     let isProofComparing = false;
+    let activePointerTarget = null;
+
     const updateFromEvent = (e) => {
       const rect = proofStage.getBoundingClientRect();
       const clientX = e.clientX ?? (e.touches ? e.touches[0].clientX : 0);
@@ -1308,13 +1316,15 @@
       setProofSplit(pct);
     };
 
-    proofStage.addEventListener('pointerdown', (e) => {
+    const startDrag = (e, el) => {
       e.preventDefault();
       isProofComparing = true;
-      try { proofStage.setPointerCapture(e.pointerId); } catch (_) {}
+      activePointerTarget = el;
+      try { el.setPointerCapture(e.pointerId); } catch (_) {}
       updateFromEvent(e);
-    });
+    };
 
+    proofStage.addEventListener('pointerdown', (e) => startDrag(e, proofStage));
     proofStage.addEventListener('pointermove', (e) => {
       if (isProofComparing) {
         e.preventDefault();
@@ -1322,15 +1332,32 @@
       }
     });
 
+    if (proofBar) {
+      proofBar.addEventListener('pointerdown', (e) => startDrag(e, proofBar));
+      proofBar.addEventListener('pointermove', (e) => {
+        if (isProofComparing) {
+          e.preventDefault();
+          updateFromEvent(e);
+        }
+      });
+    }
+
     const stopComparing = (e) => {
       if (isProofComparing) {
         isProofComparing = false;
-        try { proofStage.releasePointerCapture(e.pointerId); } catch (_) {}
+        if (activePointerTarget) {
+          try { activePointerTarget.releasePointerCapture(e.pointerId); } catch (_) {}
+          activePointerTarget = null;
+        }
       }
     };
 
     proofStage.addEventListener('pointerup', stopComparing);
     proofStage.addEventListener('pointercancel', stopComparing);
+    if (proofBar) {
+      proofBar.addEventListener('pointerup', stopComparing);
+      proofBar.addEventListener('pointercancel', stopComparing);
+    }
 
     // Initial split at 50%
     setProofSplit(50);
