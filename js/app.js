@@ -1037,29 +1037,35 @@
   let isComparing = false;
   const updateSplitFromEvent = (e) => {
     const rect = compareStage.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientX = e.clientX ?? (e.touches ? e.touches[0].clientX : 0);
     const x = clientX - rect.left;
     const pct = (x / rect.width) * 100;
     setCompareSplit(pct);
   };
 
-  compareStage.addEventListener('mousedown', (e) => {
-    isComparing = true;
-    updateSplitFromEvent(e);
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (isComparing) updateSplitFromEvent(e);
-  });
-  window.addEventListener('mouseup', () => { isComparing = false; });
+  compareStage.addEventListener('dragstart', (e) => e.preventDefault());
+  compareStage.addEventListener('selectstart', (e) => e.preventDefault());
 
-  compareStage.addEventListener('touchstart', (e) => {
+  compareStage.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     isComparing = true;
+    try { compareStage.setPointerCapture(e.pointerId); } catch (_) {}
     updateSplitFromEvent(e);
-  }, { passive: true });
-  window.addEventListener('touchmove', (e) => {
-    if (isComparing) updateSplitFromEvent(e);
-  }, { passive: true });
-  window.addEventListener('touchend', () => { isComparing = false; });
+  });
+  compareStage.addEventListener('pointermove', (e) => {
+    if (isComparing) {
+      e.preventDefault();
+      updateSplitFromEvent(e);
+    }
+  });
+  const stopModalComparing = (e) => {
+    if (isComparing) {
+      isComparing = false;
+      try { compareStage.releasePointerCapture(e.pointerId); } catch (_) {}
+    }
+  };
+  compareStage.addEventListener('pointerup', stopModalComparing);
+  compareStage.addEventListener('pointercancel', stopModalComparing);
 
   // ---- Rendering & Drag/Drop Reordering ----
 
@@ -1285,6 +1291,9 @@
     const proofStage = document.getElementById('proofStage');
     if (!proofStage) return;
 
+    proofStage.addEventListener('dragstart', (e) => e.preventDefault());
+    proofStage.addEventListener('selectstart', (e) => e.preventDefault());
+
     function setProofSplit(pct) {
       const clamped = Math.max(0, Math.min(100, pct));
       proofStage.style.setProperty('--proof-split', `${clamped}%`);
@@ -1300,13 +1309,17 @@
     };
 
     proofStage.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
       isProofComparing = true;
       try { proofStage.setPointerCapture(e.pointerId); } catch (_) {}
       updateFromEvent(e);
     });
 
     proofStage.addEventListener('pointermove', (e) => {
-      if (isProofComparing) updateFromEvent(e);
+      if (isProofComparing) {
+        e.preventDefault();
+        updateFromEvent(e);
+      }
     });
 
     const stopComparing = (e) => {
