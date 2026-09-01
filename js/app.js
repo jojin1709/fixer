@@ -148,7 +148,7 @@
   const updateSavingsBadge = () => {
     if (!savingsBadge) return;
     const total = getLifetimeSavings();
-    savingsBadge.textContent = `⚡ ${fmtBytes(total)} saved locally`;
+    savingsBadge.innerHTML = `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> ${fmtBytes(total)} saved locally`;
   };
 
   updateSavingsBadge();
@@ -169,13 +169,17 @@
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     
-    let icon = 'ℹ️';
-    if (type === 'warning') icon = '⚠️';
-    if (type === 'error') icon = '❌';
-    if (type === 'success') icon = '✓';
+    let iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+    if (type === 'warning') {
+      iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    } else if (type === 'error') {
+      iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    } else if (type === 'success') {
+      iconSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    }
 
     toast.innerHTML = `
-      <span class="toast-icon">${icon}</span>
+      <span class="toast-icon">${iconSvg}</span>
       <span class="toast-msg">${escapeHtml(message)}</span>
     `;
 
@@ -829,7 +833,7 @@
       await navigator.clipboard.write([
         new ClipboardItem({ 'image/png': blobToWrite })
       ]);
-      showToast('📋 Copied to clipboard! Ready to paste.', 'success');
+      showToast('Copied to clipboard. Ready to paste.', 'success');
     } catch (err) {
       console.warn('Clipboard write failed:', err);
       showToast('Could not copy image to clipboard in this browser.', 'warning');
@@ -1087,7 +1091,7 @@
 
       let metaHtml = '';
       if (it.status === 'failed') {
-        metaHtml = `<span class="failed-text">⚠️ ${escapeHtml(it.errorReason || 'Failed to process')}</span>`;
+        metaHtml = `<span class="failed-text">${escapeHtml(it.errorReason || 'Failed to process')}</span>`;
       } else if (it.status === 'done') {
         metaHtml = `${fmtBytes(it.originalSize)} → ${fmtBytes(it.outputSize)} <span class="saved">(-${savedPct}%)</span>`;
       } else {
@@ -1102,10 +1106,18 @@
           <span class="frame-no">${String(idx + 1).padStart(2, '0')}</span>
           ${statusBadgeHtml}
           <div class="frame-tools-bar">
-            <button type="button" class="frame-tool-btn btn-rot-left" title="Rotate Left 90°">⟲</button>
-            <button type="button" class="frame-tool-btn btn-rot-right" title="Rotate Right 90°">⟳</button>
-            <button type="button" class="frame-tool-btn btn-flip-h" title="Flip Horizontal">⇄</button>
-            <button type="button" class="frame-tool-btn btn-crop" title="Crop Photo">✂️</button>
+            <button type="button" class="frame-tool-btn btn-rot-left" title="Rotate Left 90°">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38l-2.73 2.81"/></svg>
+            </button>
+            <button type="button" class="frame-tool-btn btn-rot-right" title="Rotate Right 90°">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l2.73 2.81"/></svg>
+            </button>
+            <button type="button" class="frame-tool-btn btn-flip-h" title="Flip Horizontal">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3M12 2v20"/></svg>
+            </button>
+            <button type="button" class="frame-tool-btn btn-crop" title="Crop Photo">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></svg>
+            </button>
           </div>
         </div>
         <div class="frame-body">

@@ -721,6 +721,15 @@ input[type="number"]:focus, select:focus {
 .frame-meta .saved { color: #2f5a4f; font-weight: 600; }
 .frame-meta .failed-text { color: var(--danger); font-weight: 600; }
 
+.ui-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: -0.15em;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
 .toggle-label {
   display: flex;
   align-items: center;
@@ -730,6 +739,11 @@ input[type="number"]:focus, select:focus {
   font-weight: 600;
   color: var(--text-hi);
   user-select: none;
+}
+.toggle-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .toggle-label input[type="checkbox"] {
   accent-color: var(--amber);

@@ -47,7 +47,7 @@
         <span class="logo-mark">◐</span> Fixer
       </a>
       <span class="savings-badge" id="savingsBadge" title="Lifetime client-side savings stored on this device">
-        ⚡ 0 B saved locally
+        <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> 0 B saved locally
       </span>
     </div>
     <p class="tag">develops in your browser · nothing leaves your device</p>
@@ -58,27 +58,31 @@
 
   <section class="hero wrap">
     <div class="hero-copy">
-      <p class="frame-label">roll 01 / frame 01</p>
-      <h1>Shrink the file.<br>Keep the shot.</h1>
+      <h1>Compress photos & build PDFs entirely offline</h1>
       <p class="hero-sub">Drop in photos, pick how far to compress them, and pull them back out lighter — or stack them straight into one PDF. No uploads, no accounts, no waiting on a server.</p>
+      <a class="btn btn-primary" href="#workspace">Open darkroom</a>
     </div>
     <div class="hero-figure" aria-hidden="true">
       <div class="light-table">
-        <!-- Box 1 (Black/Dark): 35mm Film Negative with rotating genuine photos -->
+        <p class="table-label">light table · proof sheet</p>
+        
+        <!-- Box 1 (Amber): 35mm Negative Film Frame -->
         <div class="neg neg-a" id="heroNegA">
-          <div class="neg-chrome">
-            <span class="neg-code">TX 400</span>
-            <span class="neg-frame-no">24A</span>
+          <div class="neg-chrome film-chrome">
+            <span class="neg-brand">SAFETY FILM · 35mm</span>
+            <span class="neg-code">EXP 24</span>
           </div>
           <div class="neg-window">
-            <img class="neg-media active" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=450&auto=format&fit=crop&q=70" alt="Vintage camera shot">
-            <img class="neg-media" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=450&auto=format&fit=crop&q=70" alt="Mountain landscape">
-            <img class="neg-media" src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=450&auto=format&fit=crop&q=70" alt="Street photography">
-            <img class="neg-media" src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=450&auto=format&fit=crop&q=70" alt="Film forest mist">
+            <!-- Slide 1: High contrast architectural photo -->
+            <img class="neg-media active" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=450&auto=format&fit=crop&q=75" alt="Monochrome architecture">
+            <!-- Slide 2: Urban street photography -->
+            <img class="neg-media" src="https://images.unsplash.com/photo-1477959858617-67f30bc75b82?w=450&auto=format&fit=crop&q=70" alt="Urban skyline">
+            <!-- Slide 3: Detailed landscape -->
+            <img class="neg-media" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=450&auto=format&fit=crop&q=75" alt="Mountain landscape">
           </div>
-          <div class="neg-chrome neg-footer">
-            <span class="neg-brand">SAFETY FILM · 35mm</span>
-            <span class="neg-stat">-68%</span>
+          <div class="neg-meta">
+            <span>ISO 400</span>
+            <span>FRAME 01</span>
           </div>
         </div>
 
@@ -92,7 +96,9 @@
             <!-- Slide 1: Genuine PDF Document sheet -->
             <div class="neg-media pdf-mock active">
               <div class="pdf-doc-header">
-                <div class="pdf-icon">📄</div>
+                <div class="pdf-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
                 <div class="pdf-doc-title">portfolio_sheet.pdf</div>
               </div>
               <div class="doc-line w-90"></div>
@@ -108,27 +114,31 @@
             <!-- Slide 2: Contact sheet print -->
             <img class="neg-media" src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=450&auto=format&fit=crop&q=70" alt="Contact sheet photo">
             <!-- Slide 3: Document preview -->
-            <img class="neg-media" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=450&auto=format&fit=crop&q=70" alt="Architecture & documents">
+            <img class="neg-media" src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=450&auto=format&fit=crop&q=70" alt="Document print preview">
           </div>
-          <div class="neg-chrome neg-footer pdf-footer">
-            <span class="pdf-badge-stacked">STACKED INTO PDF</span>
-            <span class="pdf-size">1.4 MB</span>
+          <div class="neg-meta">
+            <span>A4 · 300 DPI</span>
+            <span>STACKED</span>
           </div>
         </div>
 
-        <!-- Box 3 (Yellow/Amber): Warm Color Slide -->
+        <!-- Box 3 (Amber/Dark): Warm Vintage Slide Frame -->
         <div class="neg neg-c" id="heroNegC">
           <div class="neg-chrome slide-chrome">
+            <span class="slide-label">KODACHROME 64</span>
             <span class="slide-no">► 12</span>
-            <span class="slide-badge">-82%</span>
           </div>
           <div class="neg-window">
-            <img class="neg-media active" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=350&auto=format&fit=crop&q=70" alt="Sunset warmth">
-            <img class="neg-media" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=350&auto=format&fit=crop&q=70" alt="Warm mountain range">
-            <img class="neg-media" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=350&auto=format&fit=crop&q=70" alt="Ocean horizon">
+            <!-- Slide 1: Golden hour sunset portrait -->
+            <img class="neg-media active" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=450&auto=format&fit=crop&q=75" alt="Warm portrait">
+            <!-- Slide 2: Sunset mountain golden tones -->
+            <img class="neg-media" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=450&auto=format&fit=crop&q=75" alt="Golden sunset">
+            <!-- Slide 3: Vintage warm tones -->
+            <img class="neg-media" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=450&auto=format&fit=crop&q=75" alt="Warm forest sunset">
           </div>
-          <div class="neg-chrome neg-footer slide-footer">
-            <span>EKTAR 100</span>
+          <div class="neg-meta">
+            <span>DAYLIGHT</span>
+            <span>DEVELOPED</span>
           </div>
         </div>
       </div>
@@ -137,50 +147,56 @@
 
   <section class="workspace wrap" id="workspace">
 
-    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload photos by dropping files or pressing Enter">
-      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp, image/heic, image/heif, .heic, .heif" multiple hidden>
-      <div class="dz-inner">
-        <p class="dz-title">Drag photos onto the light table</p>
-        <p class="dz-sub">or</p>
-        <button type="button" class="btn btn-primary" id="browseBtn">Choose files</button>
-        <p class="dz-note">JPG, PNG, WebP or iPhone HEIC. Processed locally.</p>
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload images: drag and drop files here, or press enter to browse">
+      <div class="drop-inner">
+        <p class="drop-title">Drop photos here</p>
+        <p class="drop-sub">JPG, PNG, WebP, AVIF, or iPhone HEIC · up to 50 photos · everything stays in your browser</p>
+        <button type="button" class="btn btn-secondary" id="browseBtn">Choose files</button>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif" multiple hidden>
       </div>
     </div>
 
     <div class="controls" id="controls" hidden>
-      <div class="control-tabs">
-        <button type="button" class="tab-btn active" id="modeQualityBtn" data-mode="quality">Quality Mode</button>
-        <button type="button" class="tab-btn" id="modeTargetBtn" data-mode="target">Target Size Mode</button>
+      
+      <!-- Compression Mode Switcher -->
+      <div class="control-group">
+        <label>Compression Mode</label>
+        <div class="mode-switcher" role="group" aria-label="Compression mode">
+          <button type="button" class="mode-btn active" id="modeQualityBtn">Quality Mode</button>
+          <button type="button" class="mode-btn" id="modeTargetBtn">Target File Size</button>
+        </div>
       </div>
 
-      <!-- Mode 1: Quality % -->
+      <!-- Mode 1: Quality Percentage Slider -->
       <div class="control-group" id="groupQuality">
-        <label for="quality">Compression <span id="qualityValue">70%</span></label>
-        <input type="range" id="quality" min="10" max="95" value="70" step="5" aria-label="Compression quality percentage">
-        <p class="control-hint">Lower = smaller file, more visible loss.</p>
+        <div class="control-head">
+          <label for="quality">Quality</label>
+          <span class="control-value" id="qualityValue">80%</span>
+        </div>
+        <input type="range" id="quality" min="10" max="95" value="80" step="5" aria-describedby="qualityValue">
       </div>
 
-      <!-- Mode 2: Target File Size (Binary Search) -->
+      <!-- Mode 2: Target File Size (KB/MB) -->
       <div class="control-group" id="groupTarget" hidden>
-        <label for="targetSize">Target file size</label>
-        <div class="target-input-row">
-          <input type="number" id="targetSize" min="10" max="50000" value="300" step="10" aria-label="Target file size amount">
+        <label for="targetSize">Target Max File Size</label>
+        <div class="target-size-wrap">
+          <input type="number" id="targetSize" min="10" max="50000" value="300" placeholder="e.g. 300">
           <select id="targetUnit" aria-label="Target file size unit">
             <option value="KB" selected>KB</option>
             <option value="MB">MB</option>
           </select>
         </div>
-        <p class="control-hint">Binary-searches quality to fit closest target size.</p>
+        <p class="control-hint">Fixer will automatically calculate the highest quality to match your target size.</p>
       </div>
 
       <div class="control-group">
         <label for="maxWidth">Max width</label>
         <select id="maxWidth">
-          <option value="0">Original size</option>
-          <option value="2560">2560px</option>
-          <option value="1920" selected>1920px</option>
-          <option value="1280">1280px</option>
-          <option value="800">800px</option>
+          <option value="0">Original (no resize)</option>
+          <option value="3840">3840 px (4K)</option>
+          <option value="1920" selected>1920 px (Full HD)</option>
+          <option value="1280">1280 px (HD)</option>
+          <option value="800">800 px (Web)</option>
         </select>
       </div>
 
@@ -198,7 +214,10 @@
       <div class="control-group watermark-group">
         <label for="enableWatermark" class="toggle-label">
           <input type="checkbox" id="enableWatermark">
-          <span>🏷️ Add Text Watermark</span>
+          <span class="toggle-text">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/></svg>
+            Add Text Watermark
+          </span>
         </label>
         <div class="watermark-options" id="watermarkOptions" hidden>
           <input type="text" id="watermarkText" placeholder="e.g. © Fixer Photo" maxlength="40" aria-label="Watermark text">
@@ -221,7 +240,10 @@
       <div class="control-group privacy-group">
         <label class="toggle-label">
           <input type="checkbox" id="stripExif" checked disabled>
-          <span>🔒 EXIF / GPS stripped automatically</span>
+          <span class="toggle-text">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            EXIF & GPS stripped automatically
+          </span>
         </label>
         <p class="control-hint">Canvas sandbox purges all location & device metadata.</p>
       </div>
@@ -249,7 +271,7 @@
       <div class="sheet-head">
         <div>
           <h2>Contact sheet</h2>
-          <p class="sheet-hint">💡 Drag & drop to reorder · Use ⟲ ⟳ ⇄ to rotate/flip · ✂️ to crop</p>
+          <p class="sheet-hint">Drag & drop frames to reorder · Rotate, flip, or crop using frame tools</p>
         </div>
         <p class="sheet-summary" id="sheetSummary"></p>
       </div>
@@ -340,7 +362,10 @@
   <div class="modal-dialog">
     <div class="modal-header">
       <div>
-        <h3 id="pdfModalTitle">📄 PDF Stack Settings</h3>
+        <h3 id="pdfModalTitle">
+          <svg class="ui-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          PDF Stack Settings
+        </h3>
         <p class="modal-sub">Configure page orientation, layout, and margins</p>
       </div>
       <button type="button" class="btn-close" id="closePdfModalBtn" aria-label="Close PDF options dialog">✕</button>
@@ -390,7 +415,10 @@
   <div class="modal-dialog crop-dialog">
     <div class="modal-header">
       <div>
-        <h3 id="cropModalTitle">✂️ Crop Photo</h3>
+        <h3 id="cropModalTitle">
+          <svg class="ui-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></svg>
+          Crop Photo
+        </h3>
         <p class="modal-sub" id="cropModalSub">Select aspect ratio and adjust crop box</p>
       </div>
       <button type="button" class="btn-close" id="closeCropModalBtn" aria-label="Close crop dialog">✕</button>
