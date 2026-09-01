@@ -618,6 +618,32 @@
   </div>
 </div>
 
+<!-- Full-Screen Photo Lightbox Preview Modal -->
+<div class="lightbox-modal" id="lightboxModal" hidden role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+  <div class="lightbox-dialog">
+    <div class="lightbox-header">
+      <div>
+        <h3 id="lightboxTitle">Photo Preview</h3>
+        <p class="lightbox-meta" id="lightboxMeta">Dimensions: -- · Size: --</p>
+      </div>
+      <div class="lightbox-head-actions">
+        <button type="button" class="btn-toggle-ver" id="lightboxToggleVerBtn" hidden>Show Original</button>
+        <button type="button" class="btn-close" id="closeLightboxBtn" aria-label="Close preview dialog">✕</button>
+      </div>
+    </div>
+    <div class="lightbox-stage" id="lightboxStage">
+      <img id="lightboxImg" alt="High resolution preview" draggable="false">
+    </div>
+    <div class="lightbox-footer">
+      <span id="lightboxFilterBadge" class="lightbox-filter-badge" hidden>Filter: None</span>
+      <div class="lightbox-btns">
+        <button type="button" class="btn btn-ghost" id="lightboxCloseBtn">Close</button>
+        <button type="button" class="btn btn-primary" id="lightboxDlBtn">Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Before / After Compare Modal -->
 <div class="compare-modal" id="compareModal" hidden role="dialog" aria-modal="true" aria-labelledby="compareTitle">
   <div class="compare-dialog">

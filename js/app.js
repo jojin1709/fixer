@@ -1492,7 +1492,95 @@
     reportModal.hidden = false;
   }
 
-  // Rendering with Live Film Filter Previews & Reset Button
+  // Lightbox Preview Modal
+  const lightboxModal = document.getElementById('lightboxModal');
+  const lightboxTitle = document.getElementById('lightboxTitle');
+  const lightboxMeta = document.getElementById('lightboxMeta');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxToggleVerBtn = document.getElementById('lightboxToggleVerBtn');
+  const closeLightboxBtn = document.getElementById('closeLightboxBtn');
+  const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
+  const lightboxDlBtn = document.getElementById('lightboxDlBtn');
+  const lightboxFilterBadge = document.getElementById('lightboxFilterBadge');
+
+  let currentLightboxItem = null;
+  let showingOriginalInLightbox = false;
+
+  function openLightboxModal(item) {
+    if (!item) return;
+    currentLightboxItem = item;
+    showingOriginalInLightbox = false;
+    lightboxModal.hidden = false;
+
+    lightboxTitle.textContent = item.name;
+    const currentSrc = item.outputUrl || item.url;
+    lightboxImg.src = currentSrc;
+
+    const activeFilter = filmFilterSelect ? filmFilterSelect.value : 'none';
+    lightboxImg.className = activeFilter !== 'none' ? `preview-${activeFilter}` : '';
+
+    if (activeFilter !== 'none') {
+      lightboxFilterBadge.hidden = false;
+      lightboxFilterBadge.textContent = `Filter: ${filmFilterSelect.options[filmFilterSelect.selectedIndex].text}`;
+    } else {
+      lightboxFilterBadge.hidden = true;
+    }
+
+    const sizeStr = fmtBytes(item.outputSize || item.originalSize);
+    const statusStr = item.status === 'done' ? 'Developed' : 'Original Ready';
+    lightboxMeta.textContent = `${statusStr} · ${sizeStr}`;
+
+    if (item.outputUrl) {
+      lightboxToggleVerBtn.hidden = false;
+      lightboxToggleVerBtn.textContent = 'Show Original';
+    } else {
+      lightboxToggleVerBtn.hidden = true;
+    }
+  }
+
+  function closeLightboxModal() {
+    if (lightboxModal) lightboxModal.hidden = true;
+  }
+
+  if (closeLightboxBtn) closeLightboxBtn.addEventListener('click', closeLightboxModal);
+  if (lightboxCloseBtn) lightboxCloseBtn.addEventListener('click', closeLightboxModal);
+  if (lightboxModal) {
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) closeLightboxModal();
+    });
+  }
+
+  if (lightboxToggleVerBtn) {
+    lightboxToggleVerBtn.addEventListener('click', () => {
+      if (!currentLightboxItem) return;
+      showingOriginalInLightbox = !showingOriginalInLightbox;
+      if (showingOriginalInLightbox) {
+        lightboxImg.src = currentLightboxItem.url;
+        lightboxImg.className = '';
+        lightboxToggleVerBtn.textContent = 'Show Developed';
+        lightboxMeta.textContent = `Original · ${fmtBytes(currentLightboxItem.originalSize)}`;
+      } else {
+        lightboxImg.src = currentLightboxItem.outputUrl || currentLightboxItem.url;
+        const activeFilter = filmFilterSelect ? filmFilterSelect.value : 'none';
+        lightboxImg.className = activeFilter !== 'none' ? `preview-${activeFilter}` : '';
+        lightboxToggleVerBtn.textContent = 'Show Original';
+        lightboxMeta.textContent = `Developed · ${fmtBytes(currentLightboxItem.outputSize || currentLightboxItem.originalSize)}`;
+      }
+    });
+  }
+
+  if (lightboxDlBtn) {
+    lightboxDlBtn.addEventListener('click', () => {
+      if (!currentLightboxItem) return;
+      if (currentLightboxItem.outputBlob) {
+        triggerDownload(currentLightboxItem.outputBlob, currentLightboxItem.outputName || 'fixed-photo.jpg');
+      } else {
+        showToast('Develop this photo first to download optimized version', 'info');
+      }
+    });
+  }
+
+  // Rendering with Live Film Filter Previews, Reset Button, and Preview Lightbox
   function renderFrames() {
     framesEl.innerHTML = '';
 
@@ -1534,11 +1622,14 @@
       const transformCss = `transform: rotate(${it.rotation || 0}deg) scaleX(${it.flipH ? -1 : 1});`;
 
       frame.innerHTML = `
-        <div class="frame-thumb ${filterClass}">
+        <div class="frame-thumb ${filterClass}" title="Click to preview full-size photo">
           <img src="${it.url || ''}" alt="${escapeHtml(it.name)}" loading="lazy" style="${transformCss}">
           <span class="frame-no">${String(idx + 1).padStart(2, '0')}</span>
           ${statusBadgeHtml}
           <div class="frame-tools-bar">
+            <button type="button" class="frame-tool-btn btn-preview" title="Preview Photo Full Screen">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
             <button type="button" class="frame-tool-btn btn-rot-left" title="Rotate Left 90°">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38l-2.73 2.81"/></svg>
             </button>
@@ -1571,6 +1662,17 @@
         </div>
       `;
 
+      // Click thumbnail to preview
+      frame.querySelector('.frame-thumb').addEventListener('click', (e) => {
+        if (e.target.closest('.frame-tools-bar')) return;
+        openLightboxModal(it);
+      });
+
+      frame.querySelector('.btn-preview').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openLightboxModal(it);
+      });
+
       // Quick Rotate / Flip / Crop / Reset Button Listeners
       frame.querySelector('.btn-rot-left').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1598,14 +1700,24 @@
         openCropModal(it);
       });
 
-          announce(`Moved ${movedItem.name} to position ${toIdx + 1}`);
-        }
+      frame.querySelector('.btn-reset-frame').addEventListener('click', (e) => {
+        e.stopPropagation();
+        it.rotation = 0;
+        it.flipH = false;
+        it.status = 'pending';
+        if (it.outputUrl) URL.revokeObjectURL(it.outputUrl);
+        it.outputUrl = null;
+        it.outputBlob = null;
+        it.outputSize = 0;
+        showToast(`Reset edits for "${it.name}"`, 'info');
+        renderFrames();
       });
 
       // Frame button listeners
       frame.querySelector('.btn-develop-single').addEventListener('click', async () => {
         it.status = 'processing';
         renderFrames();
+        playShutterSound();
         const saved = await compressItem(it);
         renderFrames();
         if (saved > 0) {
@@ -1628,7 +1740,10 @@
       });
 
       frame.querySelector('.dl').addEventListener('click', () => {
-        if (it.outputBlob) triggerDownload(it.outputBlob, it.outputName);
+        if (it.outputBlob) {
+          playShutterSound();
+          triggerDownload(it.outputBlob, it.outputName);
+        }
       });
 
       frame.querySelector('.remove').addEventListener('click', () => {
