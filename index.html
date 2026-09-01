@@ -258,6 +258,52 @@
 
   </section>
 
+  <!-- Visual Proof Showcase Section -->
+  <section class="proof-section wrap" id="proof">
+    <div class="proof-header">
+      <p class="frame-label">visual proof · drag to compare</p>
+      <h2>See any difference?</h2>
+      <p class="proof-sub">Drag the divider to compare the original 700 KB photo against the 250 KB compressed output. Ultra-crisp details with zero perceptible loss.</p>
+    </div>
+
+    <div class="proof-card">
+      <div class="proof-stage" id="proofStage">
+        <!-- Before View (Original high-res) -->
+        <div class="proof-view-before">
+          <img id="proofBeforeImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=95" alt="Original lizard photo before compression">
+          <span class="proof-badge badge-before">Before</span>
+        </div>
+
+        <!-- After View (Compressed) -->
+        <div class="proof-view-after" id="proofAfterWrap">
+          <img id="proofAfterImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=60" alt="Compressed photo after development">
+          <span class="proof-badge badge-after">After</span>
+        </div>
+
+        <!-- Split Slider Handle -->
+        <div class="proof-slider-line" id="proofSliderLine">
+          <div class="proof-slider-thumb" aria-label="Drag slider to compare before and after">
+            <span>‹›</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Status Bar -->
+      <div class="proof-bar">
+        <div class="proof-stat-left">
+          <span class="stat-label">SIZE BEFORE:</span>
+          <span class="stat-value">700 KB</span>
+        </div>
+        <div class="proof-stat-arrow">→</div>
+        <div class="proof-stat-right">
+          <span class="stat-label">AFTER:</span>
+          <span class="stat-value">250 KB</span>
+          <span class="stat-saved">(-64% lighter)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="how wrap">
     <h2>How it develops</h2>
     <ol class="how-steps">

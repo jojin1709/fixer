@@ -1269,6 +1269,52 @@
 
   initHeroNegRotator();
 
+  // ---- Visual Proof Showcase Slider ----
+  function initVisualProofSlider() {
+    const proofStage = document.getElementById('proofStage');
+    const proofAfterWrap = document.getElementById('proofAfterWrap');
+    const proofSliderLine = document.getElementById('proofSliderLine');
+    if (!proofStage || !proofAfterWrap || !proofSliderLine) return;
+
+    function setProofSplit(pct) {
+      const clamped = Math.max(0, Math.min(100, pct));
+      proofAfterWrap.style.width = `${clamped}%`;
+      proofSliderLine.style.left = `${clamped}%`;
+    }
+
+    let isProofComparing = false;
+    const updateFromEvent = (e) => {
+      const rect = proofStage.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const x = clientX - rect.left;
+      const pct = (x / rect.width) * 100;
+      setProofSplit(pct);
+    };
+
+    proofStage.addEventListener('mousedown', (e) => {
+      isProofComparing = true;
+      updateFromEvent(e);
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (isProofComparing) updateFromEvent(e);
+    });
+    window.addEventListener('mouseup', () => { isProofComparing = false; });
+
+    proofStage.addEventListener('touchstart', (e) => {
+      isProofComparing = true;
+      updateFromEvent(e);
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (isProofComparing) updateFromEvent(e);
+    }, { passive: true });
+    window.addEventListener('touchend', () => { isProofComparing = false; });
+
+    // Initial split
+    setProofSplit(50);
+  }
+
+  initVisualProofSlider();
+
   function escapeHtml(str) {
     if (!str) return '';
     const div = document.createElement('div');
