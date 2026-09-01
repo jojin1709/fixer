@@ -1327,7 +1327,7 @@
     });
   }
 
-  // Studio Quality Acoustic Camera Shutter Sound (Web Audio API)
+  // Gentle, Soothing Studio Chime Audio (Web Audio API)
   let isAudioMuted = false;
   let audioCtx = null;
 
@@ -1337,67 +1337,43 @@
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
 
-      const sampleRate = audioCtx.sampleRate;
       const now = audioCtx.currentTime;
 
-      // Master gain for comfortable, studio-grade volume
+      // Master gain for soft, pleasant, non-intrusive volume
       const masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0.35, now);
+      masterGain.gain.setValueAtTime(0.12, now);
       masterGain.connect(audioCtx.destination);
 
-      // 1. Primary Shutter Click (Filtered Metallic Noise Transient)
-      const noiseLen = Math.floor(sampleRate * 0.04);
-      const noiseBuffer = audioCtx.createBuffer(1, noiseLen, sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < noiseLen; i++) {
-        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleRate * 0.008));
-      }
+      // Note 1: Fundamental soft warm chime (587.33 Hz / D5)
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(587.33, now);
+      osc1.frequency.exponentialRampToValueAtTime(880, now + 0.08);
 
-      const noiseSource = audioCtx.createBufferSource();
-      noiseSource.buffer = noiseBuffer;
+      gain1.gain.setValueAtTime(0.001, now);
+      gain1.gain.linearRampToValueAtTime(0.3, now + 0.008);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
 
-      const bandpass = audioCtx.createBiquadFilter();
-      bandpass.type = 'bandpass';
-      bandpass.frequency.setValueAtTime(3400, now);
-      bandpass.Q.setValueAtTime(2.5, now);
+      osc1.connect(gain1);
+      gain1.connect(masterGain);
+      osc1.start(now);
+      osc1.stop(now + 0.16);
 
-      noiseSource.connect(bandpass);
-      bandpass.connect(masterGain);
-      noiseSource.start(now);
+      // Note 2: Gentle glassy overtone harmonic (1174.66 Hz / D6)
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1174.66, now);
 
-      // 2. Mirror Flip Thump (Warm low-frequency mechanical impulse)
-      const osc = audioCtx.createOscillator();
-      const oscGain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(150, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.05);
+      gain2.gain.setValueAtTime(0.001, now);
+      gain2.gain.linearRampToValueAtTime(0.15, now + 0.006);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
 
-      oscGain.gain.setValueAtTime(0.45, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
-      osc.connect(oscGain);
-      oscGain.connect(masterGain);
-      osc.start(now);
-      osc.stop(now + 0.05);
-
-      // 3. Secondary Curtain Latch Snap (at +45ms)
-      const snapLen = Math.floor(sampleRate * 0.035);
-      const snapBuffer = audioCtx.createBuffer(1, snapLen, sampleRate);
-      const snapData = snapBuffer.getChannelData(0);
-      for (let i = 0; i < snapLen; i++) {
-        snapData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleRate * 0.006));
-      }
-
-      const snapSource = audioCtx.createBufferSource();
-      snapSource.buffer = snapBuffer;
-
-      const highpass = audioCtx.createBiquadFilter();
-      highpass.type = 'highpass';
-      highpass.frequency.setValueAtTime(2600, now + 0.045);
-
-      snapSource.connect(highpass);
-      highpass.connect(masterGain);
-      snapSource.start(now + 0.045);
+      osc2.connect(gain2);
+      gain2.connect(masterGain);
+      osc2.start(now);
+      osc2.stop(now + 0.14);
     } catch (err) {
       console.warn('Audio playback error:', err);
     }
