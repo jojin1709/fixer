@@ -805,13 +805,34 @@ input[type="number"]:focus, select:focus {
 /* footer */
 .site-foot {
   border-top: 1px solid var(--line-soft);
-  padding: 26px 0 26px 14px;
+  padding: 26px 0;
+}
+.foot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 .foot-row p {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-low);
-  padding-left: 14px;
+}
+.foot-credit {
+  font-family: var(--font-display);
+  font-size: 0.85rem !important;
+  color: var(--text-mid) !important;
+}
+.foot-credit a {
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+.foot-credit a:hover {
+  color: var(--amber-bright);
+  text-decoration: underline;
 }
 
 /* toast stack */

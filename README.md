@@ -10,13 +10,14 @@
 **Shrink the file. Keep the shot. 100% private, client-side photo processing powered by HTML5 Canvas.**
 
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-24292e?style=for-the-badge&logo=github)](https://jojin1709.github.io/fixer/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-JOJIN%20JOHN-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jojin-john/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-dc9138?style=for-the-badge)](LICENSE)
 [![Zero Backend](https://img.shields.io/badge/Backend-None%20(100%25%20Local)-3c665e?style=for-the-badge)](#privacy--zero-upload-guarantee)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable%20%26%20Offline-f0aa52?style=for-the-badge)](#pwa--offline-mode)
 
 ---
 
-<a href="https://jojin1709.github.io/fixer/"><img src="https://img.shields.io/badge/Open%20Live%20App-Fixer-dc9138?style=for-the-badge&logo=googlechrome&logoColor=white" height="38"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/jojin1709/fixer"><img src="https://img.shields.io/badge/GitHub-Repository-1c1d22?style=for-the-badge&logo=github&logoColor=white" height="38"></a>
+<a href="https://jojin1709.github.io/fixer/"><img src="https://img.shields.io/badge/Open%20Live%20App-Fixer-dc9138?style=for-the-badge&logo=googlechrome&logoColor=white" height="38"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/jojin-john/"><img src="https://img.shields.io/badge/Connect%20on-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" height="38"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/jojin1709/fixer"><img src="https://img.shields.io/badge/GitHub-Repository-1c1d22?style=for-the-badge&logo=github&logoColor=white" height="38"></a>
 
 ---
 
@@ -36,6 +37,7 @@
 - [PWA & Offline Mode](#pwa--offline-mode)
 - [Privacy & Zero-Upload Guarantee](#privacy--zero-upload-guarantee)
 - [Common Questions](#common-questions)
+- [Developer](#developer)
 - [License](#license)
 
 ---
@@ -171,6 +173,13 @@ When you set a target size (e.g. `200 KB`), Fixer performs an automated binary s
 ### Why does Fixer warn on files larger than 20MB?
 Browsers allocate uncompressed RGBA pixel buffers in RAM for each Canvas operation (a 24-megapixel photo requires ~96MB of raw RAM). The 20MB warning is a safeguard to prevent browser tabs from freezing on mobile or lower-spec devices.
 
+## Developer
+
+Developed with ◐ by **[JOJIN JOHN](https://www.linkedin.com/in/jojin-john/)**
+
+- 💼 **LinkedIn**: [linkedin.com/in/jojin-john](https://www.linkedin.com/in/jojin-john/)
+- 🐙 **GitHub**: [@jojin1709](https://github.com/jojin1709)
+
 ---
 
 ## License
@@ -178,5 +187,5 @@ Browsers allocate uncompressed RGBA pixel buffers in RAM for each Canvas operati
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
 
 <p align="center">
-  <b>Developed with ◐ by <a href="https://github.com/jojin1709">jojin1709</a></b>
+  <b>Fixer — Developed by <a href="https://www.linkedin.com/in/jojin-john/">JOJIN JOHN</a></b>
 </p>
