@@ -579,6 +579,8 @@
       showToast(`Batch developed! Saved ${fmtBytes(totalSavedInBatch)} on this run.`, 'success');
     }
 
+    playShutterSound();
+    showRollReport();
     announce(`Batch complete. ${items.filter((x) => x.status === 'done').length} photos developed.`);
   });
 
@@ -1316,10 +1318,186 @@
   compareStage.addEventListener('pointerup', stopModalComparing);
   compareStage.addEventListener('pointercancel', stopModalComparing);
 
-  // ---- Rendering & Drag/Drop Reordering ----
+  // Live Film Filter Change Handler
+  if (filmFilterSelect) {
+    filmFilterSelect.addEventListener('change', () => {
+      renderFrames();
+      const filterName = filmFilterSelect.options[filmFilterSelect.selectedIndex].text;
+      showToast(`Filter preview: ${filterName}`, 'info', 2500);
+    });
+  }
 
+  // Audio Synthesizer (Web Audio API)
+  let isAudioMuted = false;
+  let audioCtx = null;
+
+  function playShutterSound() {
+    if (isAudioMuted) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const now = audioCtx.currentTime;
+
+      // Click 1 (Curtain open)
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(1400, now);
+      osc1.frequency.exponentialRampToValueAtTime(120, now + 0.04);
+      gain1.gain.setValueAtTime(0.3, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc1.connect(gain1);
+      gain1.connect(audioCtx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.04);
+
+      // Click 2 (Curtain close)
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(800, now + 0.06);
+      osc2.frequency.exponentialRampToValueAtTime(60, now + 0.12);
+      gain2.gain.setValueAtTime(0.25, now + 0.06);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      osc2.start(now + 0.06);
+      osc2.stop(now + 0.12);
+    } catch (err) {
+      console.warn('Audio playback error:', err);
+    }
+  }
+
+  // Safe-Light Darkroom Theme Toggle
+  const safelightToggleBtn = document.getElementById('safelightToggleBtn');
+  if (safelightToggleBtn) {
+    const savedTheme = localStorage.getItem('fixer_theme');
+    if (savedTheme === 'safelight') {
+      document.documentElement.setAttribute('data-theme', 'safelight');
+      safelightToggleBtn.classList.add('active');
+    }
+
+    safelightToggleBtn.addEventListener('click', () => {
+      const isSafe = document.documentElement.getAttribute('data-theme') === 'safelight';
+      if (isSafe) {
+        document.documentElement.removeAttribute('data-theme');
+        safelightToggleBtn.classList.remove('active');
+        localStorage.setItem('fixer_theme', 'default');
+        showToast('Safe-Light mode deactivated', 'info');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'safelight');
+        safelightToggleBtn.classList.add('active');
+        localStorage.setItem('fixer_theme', 'safelight');
+        showToast('🔴 Analog Red Safe-Light activated', 'info');
+      }
+    });
+  }
+
+  // Shutter Sound Toggle
+  const soundToggleBtn = document.getElementById('soundToggleBtn');
+  const soundLabel = document.getElementById('soundLabel');
+  if (soundToggleBtn) {
+    soundToggleBtn.addEventListener('click', () => {
+      isAudioMuted = !isAudioMuted;
+      if (isAudioMuted) {
+        if (soundLabel) soundLabel.textContent = 'Audio Off';
+        soundToggleBtn.classList.remove('active');
+        showToast('Shutter audio muted', 'info');
+      } else {
+        if (soundLabel) soundLabel.textContent = 'Audio On';
+        soundToggleBtn.classList.add('active');
+        playShutterSound();
+        showToast('🔊 Shutter audio enabled', 'info');
+      }
+    });
+  }
+
+  // URL Image Import Modal
+  const urlImportModal = document.getElementById('urlImportModal');
+  const openUrlImportBtn = document.getElementById('openUrlImportBtn');
+  const closeUrlModalBtn = document.getElementById('closeUrlModalBtn');
+  const cancelUrlModalBtn = document.getElementById('cancelUrlModalBtn');
+  const confirmFetchUrlBtn = document.getElementById('confirmFetchUrlBtn');
+  const imageUrlInput = document.getElementById('imageUrlInput');
+
+  if (openUrlImportBtn) {
+    openUrlImportBtn.addEventListener('click', () => {
+      urlImportModal.hidden = false;
+      if (imageUrlInput) imageUrlInput.focus();
+    });
+  }
+  if (closeUrlModalBtn) closeUrlModalBtn.addEventListener('click', () => { urlImportModal.hidden = true; });
+  if (cancelUrlModalBtn) cancelUrlModalBtn.addEventListener('click', () => { urlImportModal.hidden = true; });
+
+  if (confirmFetchUrlBtn) {
+    confirmFetchUrlBtn.addEventListener('click', async () => {
+      const url = imageUrlInput.value.trim();
+      if (!url) return;
+      confirmFetchUrlBtn.disabled = true;
+      confirmFetchUrlBtn.textContent = 'Fetching…';
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const blob = await res.blob();
+        const filename = url.split('/').pop().split('?')[0] || 'web-photo.jpg';
+        const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+        urlImportModal.hidden = true;
+        imageUrlInput.value = '';
+        showToast(`Loaded image from web: ${filename}`, 'success');
+        await addFiles([file]);
+      } catch (err) {
+        console.error('URL Fetch failed:', err);
+        showToast('Could not fetch image directly. The server may block direct access (CORS).', 'error', 6000);
+      } finally {
+        confirmFetchUrlBtn.disabled = false;
+        confirmFetchUrlBtn.textContent = 'Load Image';
+      }
+    });
+  }
+
+  // Roll Report Summary Receipt Modal
+  const reportModal = document.getElementById('reportModal');
+  const closeReportModalBtn = document.getElementById('closeReportModalBtn');
+  const reportCloseBtn = document.getElementById('reportCloseBtn');
+  const reportZipBtn = document.getElementById('reportZipBtn');
+  const reportCount = document.getElementById('reportCount');
+  const reportOrigSize = document.getElementById('reportOrigSize');
+  const reportOutSize = document.getElementById('reportOutSize');
+  const reportSaved = document.getElementById('reportSaved');
+
+  if (closeReportModalBtn) closeReportModalBtn.addEventListener('click', () => { reportModal.hidden = true; });
+  if (reportCloseBtn) reportCloseBtn.addEventListener('click', () => { reportModal.hidden = true; });
+  if (reportZipBtn) {
+    reportZipBtn.addEventListener('click', () => {
+      reportModal.hidden = true;
+      downloadZipBtn.click();
+    });
+  }
+
+  function showRollReport() {
+    const done = items.filter((it) => it.status === 'done');
+    if (!done.length || !reportModal) return;
+
+    const totalOrig = done.reduce((acc, it) => acc + it.originalSize, 0);
+    const totalOut = done.reduce((acc, it) => acc + it.outputSize, 0);
+    const savedBytes = Math.max(0, totalOrig - totalOut);
+    const savedPct = totalOrig > 0 ? Math.round((savedBytes / totalOrig) * 100) : 0;
+
+    reportCount.textContent = `${done.length} photo${done.length === 1 ? '' : 's'}`;
+    reportOrigSize.textContent = fmtBytes(totalOrig);
+    reportOutSize.textContent = fmtBytes(totalOut);
+    reportSaved.textContent = `${fmtBytes(savedBytes)} (-${savedPct}% lighter)`;
+
+    reportModal.hidden = false;
+  }
+
+  // Rendering with Live Film Filter Previews & Reset Button
   function renderFrames() {
     framesEl.innerHTML = '';
+
+    const activeFilter = filmFilterSelect ? filmFilterSelect.value : 'none';
+    const filterClass = activeFilter !== 'none' ? `preview-${activeFilter}` : '';
 
     items.forEach((it, idx) => {
       const frame = document.createElement('div');
@@ -1356,7 +1534,7 @@
       const transformCss = `transform: rotate(${it.rotation || 0}deg) scaleX(${it.flipH ? -1 : 1});`;
 
       frame.innerHTML = `
-        <div class="frame-thumb">
+        <div class="frame-thumb ${filterClass}">
           <img src="${it.url || ''}" alt="${escapeHtml(it.name)}" loading="lazy" style="${transformCss}">
           <span class="frame-no">${String(idx + 1).padStart(2, '0')}</span>
           ${statusBadgeHtml}
@@ -1372,6 +1550,9 @@
             </button>
             <button type="button" class="frame-tool-btn btn-crop" title="Crop Photo">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></svg>
+            </button>
+            <button type="button" class="frame-tool-btn btn-reset-frame" title="Reset Edits to Original">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
             </button>
           </div>
         </div>
@@ -1390,7 +1571,7 @@
         </div>
       `;
 
-      // Quick Rotate / Flip / Crop Button Listeners
+      // Quick Rotate / Flip / Crop / Reset Button Listeners
       frame.querySelector('.btn-rot-left').addEventListener('click', (e) => {
         e.stopPropagation();
         it.rotation = (it.rotation + 270) % 360;
@@ -1417,40 +1598,6 @@
         openCropModal(it);
       });
 
-      // Drag and Drop Handlers
-      frame.addEventListener('dragstart', (e) => {
-        draggedItemIndex = idx;
-        frame.classList.add('is-dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', String(idx));
-      });
-
-      frame.addEventListener('dragend', () => {
-        frame.classList.remove('is-dragging');
-        draggedItemIndex = null;
-        document.querySelectorAll('.frame').forEach((f) => f.classList.remove('drag-over-item'));
-      });
-
-      frame.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        frame.classList.add('drag-over-item');
-      });
-
-      frame.addEventListener('dragleave', () => {
-        frame.classList.remove('drag-over-item');
-      });
-
-      frame.addEventListener('drop', (e) => {
-        e.preventDefault();
-        frame.classList.remove('drag-over-item');
-        const fromIdx = draggedItemIndex !== null ? draggedItemIndex : parseInt(e.dataTransfer.getData('text/plain'), 10);
-        const toIdx = idx;
-
-        if (!isNaN(fromIdx) && fromIdx !== toIdx) {
-          const [movedItem] = items.splice(fromIdx, 1);
-          items.splice(toIdx, 0, movedItem);
-          renderFrames();
           announce(`Moved ${movedItem.name} to position ${toIdx + 1}`);
         }
       });

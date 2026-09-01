@@ -62,9 +62,14 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 
 | Feature | Description |
 |---|---|
+| **Live Film Filter Previews** | Real-time visual previews of darkroom film grades (*B&W Noir, Kodachrome 64, Fuji Chrome, Sepia*) right on contact sheet frame thumbnails. |
+| **Red Safe-Light Mode** | Authentic analog darkroom red safelight theme with deep crimson glow and ruby accents. |
+| **Mechanical Shutter Audio** | Realistic Web Audio API synthesized camera shutter and film advance sound with a header mute toggle. |
+| **Roll Report Summary Receipt** | Post-batch darkroom receipt displaying total frames developed, MB saved, and percentage compressed. |
+| **Import from Web URL** | Directly fetch and compress online images by pasting web links. |
+| **1-Click Frame Reset** | Undo tool on frame cards to restore original crops, rotations, and orientation. |
 | **Paste from Clipboard (Ctrl + V)** | Paste screenshots and clipboard images directly into Fixer with instant intake. |
 | **1-Click Platform Presets** | Instant pre-configured export recipes for **WhatsApp (<1MB)**, **Instagram Post (HQ)**, **Discord/Slack (<500KB)**, and **Email Ready (<250KB)**. |
-| **Darkroom Film Presets** | Apply darkroom color grading (*B&W Noir, Kodachrome 64, Fuji Chrome, Vintage Sepia*) directly during development. |
 | **Custom Text & Logo Watermarking** | Stamp text or upload PNG/SVG brand logos with adjustable positioning and opacity. |
 | **Smart Edge Sharpening** | Micro-contrast convolution filter that prevents fine textures and details from softening during downscaling. |
 | **Custom Batch File Renaming** | Define flexible output naming templates supporting `{name}`, `{num}`, and `{date}` tokens. |

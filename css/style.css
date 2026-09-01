@@ -20,6 +20,25 @@
   --font-body: 'Inter', sans-serif;
 }
 
+/* Red Safe-Light Analog Darkroom Theme */
+[data-theme="safelight"] {
+  --ink: #120505;
+  --ink-2: #1c0808;
+  --line: #3e1212;
+  --line-soft: #2e0d0d;
+  --amber: #ff3344;
+  --amber-bright: #ff5566;
+  --teal: #991a26;
+  --teal-bright: #d92638;
+  --text-hi: #ffdddd;
+  --text-mid: #cc9999;
+  --text-low: #884444;
+}
+[data-theme="safelight"] .sprocket-rail {
+  background-image: repeating-linear-gradient(to bottom, #ff3344 0, #ff3344 14px, transparent 14px, transparent 24px);
+  opacity: 0.6;
+}
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -31,6 +50,7 @@ body {
   font-family: var(--font-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .sr-only {
@@ -58,25 +78,15 @@ a { color: inherit; }
   position: fixed;
   top: 0; left: 0; bottom: 0;
   width: 14px;
-  background: repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
     to bottom,
-    var(--ink-2) 0, var(--ink-2) 10px,
-    transparent 10px, transparent 22px
+    #24252a 0,
+    #24252a 14px,
+    transparent 14px,
+    transparent 24px
   );
-  border-right: 1px solid var(--line-soft);
-  z-index: 5;
+  z-index: 10;
   pointer-events: none;
-}
-.sprocket-rail::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 4px;
-  width: 6px; height: 100%;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0, transparent 4px,
-    var(--ink) 4px, var(--ink) 16px
-  );
 }
 
 @media (max-width: 720px) {
@@ -125,6 +135,42 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+.head-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.head-btn {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  color: var(--text-mid);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+.head-btn:hover {
+  border-color: var(--amber);
+  color: var(--text-hi);
+}
+.head-btn.active {
+  background: #281010;
+  color: var(--amber-bright);
+  border-color: var(--amber);
+}
+.lamp-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff3344;
+  box-shadow: 0 0 6px #ff3344;
 }
 .tag {
   margin: 0;
@@ -1625,6 +1671,61 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 }
 @media (max-width: 768px) {
   .faq-grid { grid-template-columns: 1fr; }
+}
+
+/* Live Film Filter Preview on Frames */
+.preview-bw-noir img { filter: grayscale(100%) contrast(140%) brightness(95%) !important; }
+.preview-kodachrome img { filter: sepia(20%) saturate(140%) contrast(110%) brightness(102%) !important; }
+.preview-fuji-chrome img { filter: saturate(115%) hue-rotate(5deg) contrast(115%) brightness(100%) !important; }
+.preview-sepia img { filter: sepia(75%) contrast(110%) brightness(95%) !important; }
+
+/* Dropzone Actions & URL Import */
+.drop-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.btn-link {
+  background: transparent;
+  border: none;
+  color: var(--amber);
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px 8px;
+}
+.btn-link:hover { color: var(--amber-bright); }
+
+/* Roll Report Receipt Modal */
+.report-dialog { max-width: 440px; }
+.report-card {
+  background: var(--ink);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-family: var(--font-display);
+}
+.report-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-mid);
+}
+.report-stat-row.highlight {
+  color: var(--amber-bright);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.report-divider {
+  height: 1px;
+  border-top: 1px dashed var(--line);
+  margin: 12px 0;
 }
 
 /* focus visibility */
