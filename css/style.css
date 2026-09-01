@@ -476,6 +476,52 @@ main { padding-left: 14px; }
   align-items: start;
 }
 
+/* 1-Click Platform Presets */
+.preset-bar-wrap {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.preset-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.preset-btn {
+  background: var(--ink);
+  border: 1px solid var(--line);
+  color: var(--text-mid);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.preset-btn:hover {
+  border-color: var(--amber);
+  color: var(--text-hi);
+}
+.preset-btn.active {
+  background: #282015;
+  color: var(--amber-bright);
+  border-color: var(--amber);
+  box-shadow: 0 2px 8px rgba(220, 145, 56, 0.2);
+}
+
 .mode-switcher {
   display: flex;
   background: var(--ink);
@@ -789,7 +835,49 @@ input[type="number"]:focus, select:focus {
   border: 1px solid var(--line);
 }
 .watermark-options[hidden] { display: none !important; }
-.watermark-options input[type="text"] {
+
+.wm-type-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--ink-2);
+  padding: 2px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.wm-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-mid);
+  padding: 4px 8px;
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s ease;
+}
+.wm-tab.active {
+  background: #282015;
+  color: var(--amber-bright);
+}
+
+.wm-logo-preview-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink-2);
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.wm-logo-preview-wrap img {
+  max-width: 50px;
+  max-height: 30px;
+  object-fit: contain;
+}
+
+.watermark-options input[type="text"], .watermark-options input[type="file"] {
   width: 100%;
   background: var(--ink-2);
   border: 1px solid var(--line);

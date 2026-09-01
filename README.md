@@ -62,13 +62,18 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 
 | Feature | Description |
 |---|---|
-| **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary searches optimal quality to match target KB/MB). |
+| **Paste from Clipboard (Ctrl + V)** | Paste screenshots and clipboard images directly into Fixer with instant intake. |
+| **1-Click Platform Presets** | Instant pre-configured export recipes for **WhatsApp (<1MB)**, **Instagram Post (HQ)**, **Discord/Slack (<500KB)**, and **Email Ready (<250KB)**. |
+| **Darkroom Film Presets** | Apply darkroom color grading (*B&W Noir, Kodachrome 64, Fuji Chrome, Vintage Sepia*) directly during development. |
+| **Custom Text & Logo Watermarking** | Stamp text or upload PNG/SVG brand logos with adjustable positioning and opacity. |
+| **Smart Edge Sharpening** | Micro-contrast convolution filter that prevents fine textures and details from softening during downscaling. |
+| **Custom Batch File Renaming** | Define flexible output naming templates supporting `{name}`, `{num}`, and `{date}` tokens. |
+| **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary search). |
 | **Interactive Visual Quality Proof** | Real-time split-screen comparison slider demonstrating zero perceptible quality drop with live file-size calculation. |
 | **Quick Image Rotate & Flip** | Rotate 90° left/right and flip horizontally directly on each frame before developing or exporting. |
 | **Aspect Ratio Cropper** | Built-in photo cropper with Freeform, 1:1 Square, 4:5 Instagram, 16:9 Banner, and 4:3 Photo presets. |
-| **Custom Text Watermarking** | Stamp customizable text watermarks (position, opacity, font size) directly onto photos during compression. |
 | **One-Click Copy to Clipboard** | Copy developed photos straight to your system clipboard to paste directly into WhatsApp, Discord, or Slack. |
-| **Advanced PDF Stack Builder** | Configure page orientation (Auto/Portrait/Landscape), custom layouts (1-fit, 1-fill, 2×2 grid, 3×3 grid), margins, and page numbers. |
+| **Advanced PDF Stack Builder** | Configure custom titles, page orientation (Auto/Portrait/Landscape), layouts (1-fit, 1-fill, 2×2 grid, 3×3 grid), margins, and page numbers. |
 | **iPhone HEIC/HEIF Decoding** | Automatic in-browser decoding and conversion of iOS `.heic` and `.heif` photos to standard web formats via `heic2any`. |
 | **AVIF Next-Gen Format Support** | Next-generation AVIF export for superior compression ratios alongside WebP, JPEG, and lossless PNG. |
 | **EXIF Privacy Shield** | In-browser canvas sandbox automatically purges all embedded GPS coordinates, camera serials, and device metadata. |

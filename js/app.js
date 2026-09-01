@@ -40,15 +40,30 @@
   const liveAnnouncer = document.getElementById('liveAnnouncer');
   const savingsBadge = document.getElementById('savingsBadge');
 
+  // Preset & Filter Elements
+  const presetBtns = document.querySelectorAll('.preset-btn');
+  const filmFilterSelect = document.getElementById('filmFilter');
+  const smartSharpenCheckbox = document.getElementById('smartSharpen');
+  const filenameTemplateInput = document.getElementById('filenameTemplate');
+
   // Watermark Elements
   const enableWatermark = document.getElementById('enableWatermark');
   const watermarkOptions = document.getElementById('watermarkOptions');
+  const wmTypeTextBtn = document.getElementById('wmTypeTextBtn');
+  const wmTypeLogoBtn = document.getElementById('wmTypeLogoBtn');
+  const wmTextWrap = document.getElementById('wmTextWrap');
+  const wmLogoWrap = document.getElementById('wmLogoWrap');
   const watermarkText = document.getElementById('watermarkText');
+  const wmLogoInput = document.getElementById('wmLogoInput');
+  const wmLogoPreviewWrap = document.getElementById('wmLogoPreviewWrap');
+  const wmLogoImg = document.getElementById('wmLogoImg');
+  const removeWmLogoBtn = document.getElementById('removeWmLogoBtn');
   const watermarkPos = document.getElementById('watermarkPos');
   const watermarkOpacity = document.getElementById('watermarkOpacity');
 
   // PDF Options Modal Elements
   const pdfOptionsModal = document.getElementById('pdfOptionsModal');
+  const pdfDocTitleInput = document.getElementById('pdfDocTitle');
   const closePdfModalBtn = document.getElementById('closePdfModalBtn');
   const cancelPdfModalBtn = document.getElementById('cancelPdfModalBtn');
   const confirmBuildPdfBtn = document.getElementById('confirmBuildPdfBtn');
@@ -103,6 +118,8 @@
   let draggedItemIndex = null;
   let currentCropItem = null;
   let activeCropRatio = 'free';
+  let activeWmType = 'text'; // 'text' | 'image'
+  let loadedLogoImage = null;
 
   const MAX_BATCH_FILES = 50;
   const LARGE_FILE_THRESHOLD = 20 * 1024 * 1024; // 20MB
@@ -192,26 +209,142 @@
     }, duration);
   };
 
-  // ---- Mode Switcher & Watermark Toggle ----
+  // ---- Mode Switcher & Presets ----
 
-  modeQualityBtn.addEventListener('click', () => {
-    currentMode = 'quality';
-    modeQualityBtn.classList.add('active');
-    modeTargetBtn.classList.remove('active');
-    groupQuality.hidden = false;
-    groupTarget.hidden = true;
+  const setCompressionMode = (mode) => {
+    currentMode = mode;
+    if (mode === 'quality') {
+      modeQualityBtn.classList.add('active');
+      modeTargetBtn.classList.remove('active');
+      groupQuality.hidden = false;
+      groupTarget.hidden = true;
+    } else {
+      modeTargetBtn.classList.add('active');
+      modeQualityBtn.classList.remove('active');
+      groupQuality.hidden = true;
+      groupTarget.hidden = false;
+    }
+  };
+
+  modeQualityBtn.addEventListener('click', () => setCompressionMode('quality'));
+  modeTargetBtn.addEventListener('click', () => setCompressionMode('target'));
+
+  // 1-Click Platform Presets
+  presetBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      presetBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const preset = btn.dataset.preset;
+      applyPlatformPreset(preset);
+    });
   });
 
-  modeTargetBtn.addEventListener('click', () => {
-    currentMode = 'target';
-    modeTargetBtn.classList.add('active');
-    modeQualityBtn.classList.remove('active');
-    groupQuality.hidden = true;
-    groupTarget.hidden = false;
-  });
+  function applyPlatformPreset(preset) {
+    if (preset === 'whatsapp') {
+      setCompressionMode('target');
+      targetSizeInput.value = '950';
+      targetUnitSelect.value = 'KB';
+      formatSelect.value = 'image/webp';
+      maxWidthSelect.value = '1920';
+      showToast('Applied WhatsApp Preset (<1MB, WebP)', 'info');
+    } else if (preset === 'instagram') {
+      setCompressionMode('quality');
+      qualitySlider.value = '90';
+      qualityValue.textContent = '90%';
+      formatSelect.value = 'image/jpeg';
+      maxWidthSelect.value = '1920';
+      showToast('Applied Instagram Post Preset (HQ JPEG)', 'info');
+    } else if (preset === 'discord') {
+      setCompressionMode('target');
+      targetSizeInput.value = '480';
+      targetUnitSelect.value = 'KB';
+      formatSelect.value = 'image/webp';
+      maxWidthSelect.value = '800';
+      showToast('Applied Discord/Slack Preset (<500KB)', 'info');
+    } else if (preset === 'email') {
+      setCompressionMode('target');
+      targetSizeInput.value = '250';
+      targetUnitSelect.value = 'KB';
+      formatSelect.value = 'image/jpeg';
+      maxWidthSelect.value = '1280';
+      showToast('Applied Email Ready Preset (<250KB JPEG)', 'info');
+    }
+  }
 
+  // Watermark Settings & Type Switcher
   enableWatermark.addEventListener('change', () => {
     watermarkOptions.hidden = !enableWatermark.checked;
+  });
+
+  if (wmTypeTextBtn && wmTypeLogoBtn) {
+    wmTypeTextBtn.addEventListener('click', () => {
+      activeWmType = 'text';
+      wmTypeTextBtn.classList.add('active');
+      wmTypeLogoBtn.classList.remove('active');
+      wmTextWrap.hidden = false;
+      wmLogoWrap.hidden = true;
+    });
+
+    wmTypeLogoBtn.addEventListener('click', () => {
+      activeWmType = 'image';
+      wmTypeLogoBtn.classList.add('active');
+      wmTypeTextBtn.classList.remove('active');
+      wmTextWrap.hidden = true;
+      wmLogoWrap.hidden = false;
+    });
+  }
+
+  if (wmLogoInput) {
+    wmLogoInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          loadedLogoImage = img;
+          wmLogoImg.src = url;
+          wmLogoPreviewWrap.hidden = false;
+          showToast('Logo watermark loaded successfully.', 'success');
+        };
+        img.src = url;
+      }
+    });
+  }
+
+  if (removeWmLogoBtn) {
+    removeWmLogoBtn.addEventListener('click', () => {
+      loadedLogoImage = null;
+      if (wmLogoImg) wmLogoImg.src = '';
+      if (wmLogoInput) wmLogoInput.value = '';
+      if (wmLogoPreviewWrap) wmLogoPreviewWrap.hidden = true;
+      showToast('Logo watermark removed.', 'info');
+    });
+  }
+
+  // Global Clipboard Paste Handler (Ctrl + V)
+  window.addEventListener('paste', async (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const itemsList = e.clipboardData?.items;
+    if (!itemsList) return;
+
+    const imageFiles = [];
+    for (const item of itemsList) {
+      if (item.type && item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+          const ext = file.type.split('/')[1] || 'png';
+          const renamed = new File([file], `clipboard-${timestamp}.${ext}`, { type: file.type });
+          imageFiles.push(renamed);
+        }
+      }
+    }
+
+    if (imageFiles.length > 0) {
+      e.preventDefault();
+      showToast(`Pasted ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} from clipboard!`, 'info');
+      await addFiles(imageFiles);
+    }
   });
 
   // ---- File Intake & HEIC Conversion ----
@@ -602,7 +735,13 @@
         }
       }
 
-      pdf.save('fixer-contact-sheet.pdf');
+      const docTitle = (pdfDocTitleInput ? pdfDocTitleInput.value : '').trim() || 'Fixer Photo Stack';
+      pdf.setProperties({
+        title: docTitle,
+        creator: 'Fixer by JOJIN JOHN'
+      });
+
+      pdf.save(`${docTitle.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'fixer-contact-sheet'}.pdf`);
       showToast('PDF created and downloaded.', 'success');
       announce('PDF stacked and downloaded.');
     } catch (err) {
@@ -614,7 +753,64 @@
     }
   }
 
-  // ---- Compression Core with Rotation, Flip, Watermarking & Target Size Binary Search ----
+  // ---- Sharpening Convolution Filter ----
+  function applySharpenConvolution(ctx, width, height) {
+    try {
+      const imgData = ctx.getImageData(0, 0, width, height);
+      const src = imgData.data;
+      const output = ctx.createImageData(width, height);
+      const dst = output.data;
+      const weights = [0, -0.4, 0, -0.4, 2.6, -0.4, 0, -0.4, 0];
+      const side = 3;
+      const half = 1;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const dstIdx = (y * width + x) * 4;
+          let r = 0, g = 0, b = 0;
+          for (let cy = 0; cy < side; cy++) {
+            for (let cx = 0; cx < side; cx++) {
+              const scy = Math.min(height - 1, Math.max(0, y + cy - half));
+              const scx = Math.min(width - 1, Math.max(0, x + cx - half));
+              const srcIdx = (scy * width + scx) * 4;
+              const wt = weights[cy * side + cx];
+              r += src[srcIdx] * wt;
+              g += src[srcIdx + 1] * wt;
+              b += src[srcIdx + 2] * wt;
+            }
+          }
+          dst[dstIdx] = Math.min(255, Math.max(0, r));
+          dst[dstIdx + 1] = Math.min(255, Math.max(0, g));
+          dst[dstIdx + 2] = Math.min(255, Math.max(0, b));
+          dst[dstIdx + 3] = src[dstIdx + 3];
+        }
+      }
+      ctx.putImageData(output, 0, 0);
+    } catch (e) {
+      console.warn('Sharpening filter error:', e);
+    }
+  }
+
+  // Custom Output Filename Pattern Generator
+  function generateOutputFilename(originalName, index, targetMime) {
+    const template = (filenameTemplateInput ? filenameTemplateInput.value : '').trim() || '{name}-fixed';
+    const base = originalName.replace(/\.[^.]+$/, '');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const numStr = String(index + 1).padStart(2, '0');
+    const ext = extForMime(targetMime);
+
+    let out = template
+      .replace(/\{name\}/g, base)
+      .replace(/\{num\}/g, numStr)
+      .replace(/\{date\}/g, dateStr);
+
+    if (!out.toLowerCase().endsWith(`.${ext}`)) {
+      out += `.${ext}`;
+    }
+    return out;
+  }
+
+  // ---- Compression Core with Rotation, Flip, Film Presets, Sharpening & Watermarking ----
 
   /**
    * Compresses a single item based on active settings.
@@ -655,6 +851,20 @@
               ctx.fillRect(0, 0, canvasW, canvasH);
             }
 
+            // Apply Darkroom Film Filter
+            const filterVal = filmFilterSelect ? filmFilterSelect.value : 'none';
+            if (filterVal === 'bw-noir') {
+              ctx.filter = 'grayscale(100%) contrast(140%) brightness(95%)';
+            } else if (filterVal === 'kodachrome') {
+              ctx.filter = 'sepia(20%) saturate(140%) contrast(110%) brightness(102%)';
+            } else if (filterVal === 'fuji-chrome') {
+              ctx.filter = 'saturate(115%) hue-rotate(5deg) contrast(115%) brightness(100%)';
+            } else if (filterVal === 'sepia') {
+              ctx.filter = 'sepia(75%) contrast(110%) brightness(95%)';
+            } else {
+              ctx.filter = 'none';
+            }
+
             // Apply rotation and flip transforms
             ctx.save();
             ctx.translate(canvasW / 2, canvasH / 2);
@@ -662,45 +872,83 @@
             if (item.flipH) ctx.scale(-1, 1);
             ctx.drawImage(img, -width / 2, -height / 2, width, height);
             ctx.restore();
+            ctx.filter = 'none'; // Reset filter
 
-            // Apply Watermark if enabled
-            if (enableWatermark.checked && watermarkText.value.trim()) {
-              const text = watermarkText.value.trim();
+            // Apply Smart Edge Sharpening if checked
+            if (smartSharpenCheckbox && smartSharpenCheckbox.checked) {
+              applySharpenConvolution(ctx, canvasW, canvasH);
+            }
+
+            // Apply Watermark if enabled (Text or Logo Image)
+            if (enableWatermark.checked) {
               const opacity = parseFloat(watermarkOpacity.value) || 0.6;
               const pos = watermarkPos.value;
 
-              ctx.save();
-              const fontSize = Math.max(14, Math.round(canvasW * 0.035));
-              ctx.font = `bold ${fontSize}px sans-serif`;
-              ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-              ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-              ctx.shadowBlur = 4;
-              ctx.shadowOffsetX = 1;
-              ctx.shadowOffsetY = 1;
+              if (activeWmType === 'image' && loadedLogoImage) {
+                // Logo Image Watermark
+                const logoMaxW = Math.max(40, Math.round(canvasW * 0.18));
+                const logoRatio = logoMaxW / loadedLogoImage.width;
+                const logoW = logoMaxW;
+                const logoH = loadedLogoImage.height * logoRatio;
+                const pad = Math.round(canvasW * 0.03);
 
-              const textMetrics = ctx.measureText(text);
-              const textW = textMetrics.width;
-              const pad = Math.round(fontSize * 0.8);
+                let lx = pad;
+                let ly = canvasH - logoH - pad;
 
-              let wx = pad;
-              let wy = canvasH - pad;
+                if (pos === 'bottom-right') {
+                  lx = canvasW - logoW - pad;
+                  ly = canvasH - logoH - pad;
+                } else if (pos === 'bottom-left') {
+                  lx = pad;
+                  ly = canvasH - logoH - pad;
+                } else if (pos === 'top-right') {
+                  lx = canvasW - logoW - pad;
+                  ly = pad;
+                } else if (pos === 'center') {
+                  lx = (canvasW - logoW) / 2;
+                  ly = (canvasH - logoH) / 2;
+                }
 
-              if (pos === 'bottom-right') {
-                wx = canvasW - textW - pad;
-                wy = canvasH - pad;
-              } else if (pos === 'bottom-left') {
-                wx = pad;
-                wy = canvasH - pad;
-              } else if (pos === 'top-right') {
-                wx = canvasW - textW - pad;
-                wy = pad + fontSize;
-              } else if (pos === 'center') {
-                wx = (canvasW - textW) / 2;
-                wy = (canvasH + fontSize) / 2;
+                ctx.save();
+                ctx.globalAlpha = opacity;
+                ctx.drawImage(loadedLogoImage, lx, ly, logoW, logoH);
+                ctx.restore();
+              } else if (watermarkText.value.trim()) {
+                // Text Watermark
+                const text = watermarkText.value.trim();
+                ctx.save();
+                const fontSize = Math.max(14, Math.round(canvasW * 0.035));
+                ctx.font = `bold ${fontSize}px sans-serif`;
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
+                const textMetrics = ctx.measureText(text);
+                const textW = textMetrics.width;
+                const pad = Math.round(fontSize * 0.8);
+
+                let wx = pad;
+                let wy = canvasH - pad;
+
+                if (pos === 'bottom-right') {
+                  wx = canvasW - textW - pad;
+                  wy = canvasH - pad;
+                } else if (pos === 'bottom-left') {
+                  wx = pad;
+                  wy = canvasH - pad;
+                } else if (pos === 'top-right') {
+                  wx = canvasW - textW - pad;
+                  wy = pad + fontSize;
+                } else if (pos === 'center') {
+                  wx = (canvasW - textW) / 2;
+                  wy = (canvasH + fontSize) / 2;
+                }
+
+                ctx.fillText(text, wx, wy);
+                ctx.restore();
               }
-
-              ctx.fillText(text, wx, wy);
-              ctx.restore();
             }
 
             let chosenBlob = null;
@@ -747,8 +995,9 @@
             item.outputBlob = chosenBlob;
             item.outputUrl = URL.createObjectURL(chosenBlob);
             item.outputSize = chosenBlob.size;
-            const base = item.name.replace(/\.[^.]+$/, '');
-            item.outputName = `${base}-fixed.${extForMime(mime)}`;
+
+            const itemIdx = items.indexOf(item);
+            item.outputName = generateOutputFilename(item.name, itemIdx >= 0 ? itemIdx : 0, mime);
             item.status = 'done';
 
             const savedBytes = Math.max(0, item.originalSize - item.outputSize);

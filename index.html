@@ -143,6 +143,18 @@
 
     <div class="controls" id="controls" hidden>
       
+      <!-- Platform Presets Quick Bar -->
+      <div class="preset-bar-wrap">
+        <span class="preset-label">1-Click Presets:</span>
+        <div class="preset-chips" role="group" aria-label="Platform presets">
+          <button type="button" class="preset-btn active" data-preset="custom">Custom</button>
+          <button type="button" class="preset-btn" data-preset="whatsapp">WhatsApp (&lt;1MB)</button>
+          <button type="button" class="preset-btn" data-preset="instagram">Instagram Post</button>
+          <button type="button" class="preset-btn" data-preset="discord">Discord / Slack (&lt;500KB)</button>
+          <button type="button" class="preset-btn" data-preset="email">Email Ready (&lt;250KB)</button>
+        </div>
+      </div>
+
       <!-- Compression Mode Switcher -->
       <div class="control-group">
         <label>Compression Mode</label>
@@ -195,17 +207,54 @@
         </select>
       </div>
 
-      <!-- Watermark & Privacy Section -->
+      <!-- Darkroom Film Preset -->
+      <div class="control-group">
+        <label for="filmFilter">Darkroom Film Filter</label>
+        <select id="filmFilter">
+          <option value="none" selected>None (Natural Shot)</option>
+          <option value="bw-noir">B&W Noir (High Contrast)</option>
+          <option value="kodachrome">Kodachrome 64 (Warm Golden)</option>
+          <option value="fuji-chrome">Fuji Chrome (Emerald / Cool)</option>
+          <option value="sepia">Sepia Vintage (Archival)</option>
+        </select>
+      </div>
+
+      <!-- Smart Sharpen & Privacy Section -->
+      <div class="control-group">
+        <label for="smartSharpen" class="toggle-label">
+          <input type="checkbox" id="smartSharpen">
+          <span class="toggle-text">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Smart Edge Sharpening
+          </span>
+        </label>
+        <p class="control-hint">Maintains micro-contrast and texture when downscaling.</p>
+      </div>
+
+      <!-- Watermark Section (Text or Logo Image) -->
       <div class="control-group watermark-group">
         <label for="enableWatermark" class="toggle-label">
           <input type="checkbox" id="enableWatermark">
           <span class="toggle-text">
             <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1"/></svg>
-            Add Text Watermark
+            Add Watermark
           </span>
         </label>
         <div class="watermark-options" id="watermarkOptions" hidden>
-          <input type="text" id="watermarkText" placeholder="e.g. © Fixer Photo" maxlength="40" aria-label="Watermark text">
+          <div class="wm-type-tabs">
+            <button type="button" class="wm-tab active" id="wmTypeTextBtn">Text</button>
+            <button type="button" class="wm-tab" id="wmTypeLogoBtn">Logo Image</button>
+          </div>
+          <div id="wmTextWrap">
+            <input type="text" id="watermarkText" placeholder="e.g. © Fixer Photo" maxlength="40" aria-label="Watermark text">
+          </div>
+          <div id="wmLogoWrap" hidden>
+            <input type="file" id="wmLogoInput" accept="image/png,image/svg+xml,image/jpeg,image/webp" aria-label="Upload logo watermark">
+            <div id="wmLogoPreviewWrap" class="wm-logo-preview-wrap" hidden>
+              <img id="wmLogoImg" alt="Watermark logo preview">
+              <button type="button" id="removeWmLogoBtn" class="btn-text">Remove</button>
+            </div>
+          </div>
           <div class="watermark-row">
             <select id="watermarkPos" aria-label="Watermark position">
               <option value="bottom-right" selected>Bottom-Right</option>
@@ -220,6 +269,13 @@
             </select>
           </div>
         </div>
+      </div>
+
+      <!-- Output Naming Template -->
+      <div class="control-group">
+        <label for="filenameTemplate">Output Filename Pattern</label>
+        <input type="text" id="filenameTemplate" value="{name}-fixed" placeholder="e.g. {name}-fixed, photo_{num}">
+        <p class="control-hint">Supports <code>{name}</code>, <code>{num}</code>, <code>{date}</code></p>
       </div>
 
       <div class="control-group privacy-group">
@@ -256,7 +312,7 @@
       <div class="sheet-head">
         <div>
           <h2>Contact sheet</h2>
-          <p class="sheet-hint">Drag & drop frames to reorder · Rotate, flip, or crop using frame tools</p>
+          <p class="sheet-hint">Drag & drop frames to reorder · Rotate, flip, or crop using frame tools · Ctrl+V to paste</p>
         </div>
         <p class="sheet-summary" id="sheetSummary"></p>
       </div>
@@ -320,21 +376,21 @@
         <span class="step-no">01</span>
         <div>
           <h3>Load & Edit</h3>
-          <p>Drop in JPG, PNG, WebP, AVIF, or HEIC photos. Rotate, flip, crop to custom ratios, or watermark directly.</p>
+          <p>Drop in JPG, PNG, WebP, AVIF, or HEIC photos (or paste with Ctrl+V). Rotate, flip, crop, film-grade, or watermark.</p>
         </div>
       </li>
       <li>
         <span class="step-no">02</span>
         <div>
           <h3>Set the exposure</h3>
-          <p>Pick a quality level or set an exact target KB size. The browser's canvas does the re-encoding locally.</p>
+          <p>Pick a 1-click preset, set quality, target KB size, or apply smart sharpening. Processed 100% locally on your CPU.</p>
         </div>
       </li>
       <li>
         <span class="step-no">03</span>
         <div>
           <h3>Pull the prints</h3>
-          <p>Copy to clipboard with one click, download individually, grab a .zip, or configure & stack into a custom PDF.</p>
+          <p>Copy to clipboard with one click, download individually, grab a .zip, or stack into a password-protected PDF.</p>
         </div>
       </li>
     </ol>
@@ -356,6 +412,10 @@
       <button type="button" class="btn-close" id="closePdfModalBtn" aria-label="Close PDF options dialog">✕</button>
     </div>
     <div class="modal-body">
+      <div class="modal-group">
+        <label for="pdfDocTitle">Document Title (Optional)</label>
+        <input type="text" id="pdfDocTitle" placeholder="e.g. Fixer Portfolio Contact Sheet" maxlength="60">
+      </div>
       <div class="modal-group">
         <label for="pdfOrientation">Page Orientation</label>
         <select id="pdfOrientation">
