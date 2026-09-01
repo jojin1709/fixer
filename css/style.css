@@ -20,25 +20,6 @@
   --font-body: 'Inter', sans-serif;
 }
 
-/* Red Safe-Light Analog Darkroom Theme */
-[data-theme="safelight"] {
-  --ink: #120505;
-  --ink-2: #1c0808;
-  --line: #3e1212;
-  --line-soft: #2e0d0d;
-  --amber: #ff3344;
-  --amber-bright: #ff5566;
-  --teal: #991a26;
-  --teal-bright: #d92638;
-  --text-hi: #ffdddd;
-  --text-mid: #cc9999;
-  --text-low: #884444;
-}
-[data-theme="safelight"] .sprocket-rail {
-  background-image: repeating-linear-gradient(to bottom, #ff3344 0, #ff3344 14px, transparent 14px, transparent 24px);
-  opacity: 0.6;
-}
-
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -161,16 +142,9 @@ a { color: inherit; }
   color: var(--text-hi);
 }
 .head-btn.active {
-  background: #281010;
+  background: var(--ink);
   color: var(--amber-bright);
   border-color: var(--amber);
-}
-.lamp-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ff3344;
-  box-shadow: 0 0 6px #ff3344;
 }
 .tag {
   margin: 0;

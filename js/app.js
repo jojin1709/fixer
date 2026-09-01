@@ -1369,30 +1369,9 @@
     }
   }
 
-  // Safe-Light Darkroom Theme Toggle
-  const safelightToggleBtn = document.getElementById('safelightToggleBtn');
-  if (safelightToggleBtn) {
-    const savedTheme = localStorage.getItem('fixer_theme');
-    if (savedTheme === 'safelight') {
-      document.documentElement.setAttribute('data-theme', 'safelight');
-      safelightToggleBtn.classList.add('active');
-    }
-
-    safelightToggleBtn.addEventListener('click', () => {
-      const isSafe = document.documentElement.getAttribute('data-theme') === 'safelight';
-      if (isSafe) {
-        document.documentElement.removeAttribute('data-theme');
-        safelightToggleBtn.classList.remove('active');
-        localStorage.setItem('fixer_theme', 'default');
-        showToast('Safe-Light mode deactivated', 'info');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'safelight');
-        safelightToggleBtn.classList.add('active');
-        localStorage.setItem('fixer_theme', 'safelight');
-        showToast('🔴 Analog Red Safe-Light activated', 'info');
-      }
-    });
-  }
+  // Clean any old safelight theme
+  document.documentElement.removeAttribute('data-theme');
+  try { localStorage.removeItem('fixer_theme'); } catch (_) {}
 
   // Shutter Sound Toggle
   const soundToggleBtn = document.getElementById('soundToggleBtn');

@@ -63,7 +63,6 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 | Feature | Description |
 |---|---|
 | **Live Film Filter Previews** | Real-time visual previews of darkroom film grades (*B&W Noir, Kodachrome 64, Fuji Chrome, Sepia*) right on contact sheet frame thumbnails. |
-| **Red Safe-Light Mode** | Authentic analog darkroom red safelight theme with deep crimson glow and ruby accents. |
 | **Mechanical Shutter Audio** | Realistic Web Audio API synthesized camera shutter and film advance sound with a header mute toggle. |
 | **Roll Report Summary Receipt** | Post-batch darkroom receipt displaying total frames developed, MB saved, and percentage compressed. |
 | **Import from Web URL** | Directly fetch and compress online images by pasting web links. |
