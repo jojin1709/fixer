@@ -1575,6 +1575,46 @@ input[type="number"]:focus, select:focus {
   color: var(--text-low);
 }
 
+/* SEO FAQ Section */
+.faq {
+  padding: 80px 28px;
+  border-top: 1px solid var(--line-soft);
+}
+.faq-head {
+  margin-bottom: 36px;
+}
+.faq-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin: 0;
+}
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 36px;
+}
+.faq-item {
+  background: var(--ink-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.faq-item h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-hi);
+  margin: 0 0 10px;
+}
+.faq-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.55;
+}
+@media (max-width: 768px) {
+  .faq-grid { grid-template-columns: 1fr; }
+}
+
 /* focus visibility */
 :focus-visible {
   outline: 2px solid var(--amber-bright);

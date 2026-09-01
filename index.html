@@ -3,27 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fixer — Compress images & build PDFs, right in your browser</title>
-<meta name="description" content="Shrink photos and turn them into a PDF without uploading a single byte. Everything runs in your browser.">
+<title>Fixer — Free In-Browser Image Compressor, HEIC Converter & PDF Builder</title>
+<meta name="description" content="Compress JPG, PNG, WebP, AVIF & iPhone HEIC photos instantly in your browser with zero data uploads. 100% private, client-side photo processing developed by JOJIN JOHN.">
+<meta name="keywords" content="image compressor, photo compressor, reduce image size, in browser image compressor, offline image compressor, compress jpeg, compress png, compress webp, compress avif, heic to jpg, convert heic online, image to pdf, photo contact sheet, private photo compressor, no upload image compressor, Fixer, JOJIN JOHN">
+<meta name="author" content="JOJIN JOHN">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="theme-color" content="#15161a">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://jojin1709.github.io/fixer/">
 
 <!-- Favicon & PWA -->
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
 <link rel="manifest" href="manifest.json">
-<link rel="canonical" href="https://jojin1709.github.io/fixer/">
 
-<!-- Open Graph / Facebook / Discord / WhatsApp -->
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Fixer Photo Studio">
 <meta property="og:url" content="https://jojin1709.github.io/fixer/">
-<meta property="og:title" content="Fixer — In-Browser Image Compressor & PDF Builder">
-<meta property="og:description" content="Shrink photos, batch convert, and build PDFs instantly in your browser. 100% private & client-side.">
-<meta property="og:image" content="favicon.svg">
+<meta property="og:title" content="Fixer — In-Browser Image Compressor, HEIC Converter & PDF Builder">
+<meta property="og:description" content="Compress JPG, PNG, WebP, AVIF & iPhone HEIC photos locally without uploading. 100% private & client-side by JOJIN JOHN.">
+<meta property="og:image" content="https://jojin1709.github.io/fixer/favicon.svg">
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Fixer — In-Browser Image Compressor & PDF Builder">
-<meta name="twitter:description" content="Shrink photos, batch convert, and build PDFs instantly in your browser. 100% private & client-side.">
-<meta name="twitter:image" content="favicon.svg">
+<meta name="twitter:description" content="Compress JPG, PNG, WebP, AVIF & iPhone HEIC photos locally without uploading. 100% private & client-side by JOJIN JOHN.">
+<meta name="twitter:image" content="https://jojin1709.github.io/fixer/favicon.svg">
+
+<!-- Google Schema.org Structured Data (JSON-LD) for Fast Ranking -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://jojin1709.github.io/fixer/#app",
+      "name": "Fixer",
+      "url": "https://jojin1709.github.io/fixer/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "description": "Client-side web application to compress images (JPEG, PNG, WebP, AVIF), convert iPhone HEIC photos, and compile contact sheet PDFs 100% offline.",
+      "author": {
+        "@type": "Person",
+        "name": "JOJIN JOHN",
+        "url": "https://www.linkedin.com/in/jojin-john/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "In-Browser Image Compression",
+        "Target File Size Binary Search",
+        "iPhone HEIC to JPEG Conversion",
+        "Multi-Layout PDF Contact Sheet Builder",
+        "EXIF & GPS Metadata Purge",
+        "Aspect Ratio Cropper",
+        "Darkroom Film Presets",
+        "Logo & Text Watermarking",
+        "Smart Sharpening Filter",
+        "PWA Offline Mode"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://jojin1709.github.io/fixer/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does Fixer compress images without uploading?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fixer uses the browser's native HTML5 Canvas 2D API to re-encode and compress images directly inside your device's memory. No photos are ever sent over the internet or uploaded to any server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Fixer convert iPhone HEIC photos to JPG or WebP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Fixer decodes iOS HEIC and HEIF photos client-side in your browser and lets you export them as optimized JPEG, WebP, AVIF, or lossless PNG."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Fixer remove location and camera metadata from photos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. When images are developed on the HTML5 Canvas sandbox, all private EXIF data, GPS coordinates, and camera serial numbers are completely stripped automatically."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Fixer completely free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Fixer is 100% free and open source with no subscriptions, accounts, or file size paywalls."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -394,6 +480,32 @@
         </div>
       </li>
     </ol>
+  </section>
+
+  <!-- SEO Frequently Asked Questions Section -->
+  <section class="faq wrap" id="faq">
+    <div class="faq-head">
+      <p class="frame-label">frequently asked questions</p>
+      <h2>Common Questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>How does Fixer compress images without uploading?</h3>
+        <p>Fixer uses the browser's native HTML5 Canvas 2D API to decode, resize, and re-encode photos directly inside your computer or phone RAM. No files are ever transmitted over a network socket.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I convert iPhone HEIC photos to JPG or WebP?</h3>
+        <p>Yes. Fixer automatically decodes iOS <code>.heic</code> and <code>.heif</code> camera files in-browser via WebAssembly, allowing instant conversion into high-quality JPEG, WebP, AVIF, or PNG.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does Fixer remove private location and camera metadata?</h3>
+        <p>Yes. When images are processed on our HTML5 Canvas sandbox, all embedded GPS location coordinates, camera models, and private timestamps are automatically stripped for total privacy.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How do I compile multiple photos into a single PDF?</h3>
+        <p>Drop your photos into Fixer, click <strong>Develop all</strong>, and then click <strong>Stack into PDF</strong>. You can choose between 1 photo per page or 2×2 / 3×3 contact sheets with custom margins.</p>
+      </div>
+    </div>
   </section>
 
 </main>
