@@ -1271,9 +1271,7 @@
   // ---- Visual Proof Showcase Slider ----
   function initVisualProofSlider() {
     const proofStage = document.getElementById('proofStage');
-    const proofAfterWrap = document.getElementById('proofAfterWrap');
-    const proofSliderLine = document.getElementById('proofSliderLine');
-    if (!proofStage || !proofAfterWrap || !proofSliderLine) return;
+    if (!proofStage) return;
 
     function setProofSplit(pct) {
       const clamped = Math.max(0, Math.min(100, pct));
@@ -1283,31 +1281,33 @@
     let isProofComparing = false;
     const updateFromEvent = (e) => {
       const rect = proofStage.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientX = e.clientX ?? (e.touches ? e.touches[0].clientX : 0);
       const x = clientX - rect.left;
       const pct = (x / rect.width) * 100;
       setProofSplit(pct);
     };
 
-    proofStage.addEventListener('mousedown', (e) => {
+    proofStage.addEventListener('pointerdown', (e) => {
       isProofComparing = true;
+      try { proofStage.setPointerCapture(e.pointerId); } catch (_) {}
       updateFromEvent(e);
     });
-    window.addEventListener('mousemove', (e) => {
+
+    proofStage.addEventListener('pointermove', (e) => {
       if (isProofComparing) updateFromEvent(e);
     });
-    window.addEventListener('mouseup', () => { isProofComparing = false; });
 
-    proofStage.addEventListener('touchstart', (e) => {
-      isProofComparing = true;
-      updateFromEvent(e);
-    }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-      if (isProofComparing) updateFromEvent(e);
-    }, { passive: true });
-    window.addEventListener('touchend', () => { isProofComparing = false; });
+    const stopComparing = (e) => {
+      if (isProofComparing) {
+        isProofComparing = false;
+        try { proofStage.releasePointerCapture(e.pointerId); } catch (_) {}
+      }
+    };
 
-    // Initial split
+    proofStage.addEventListener('pointerup', stopComparing);
+    proofStage.addEventListener('pointercancel', stopComparing);
+
+    // Initial split at 50%
     setProofSplit(50);
   }
 

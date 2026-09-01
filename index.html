@@ -268,17 +268,19 @@
 
     <div class="proof-card">
       <div class="proof-stage" id="proofStage">
-        <!-- Before View (Original high-res) -->
+        <!-- Before Layer (Full width, base) -->
         <div class="proof-view-before">
-          <img id="proofBeforeImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=95" alt="Original lizard photo before compression">
-          <span class="proof-badge badge-before">Before</span>
+          <img id="proofBeforeImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=95" alt="Original high quality photo before compression">
         </div>
 
-        <!-- After View (Compressed) -->
+        <!-- After Layer (Clipped to slider) -->
         <div class="proof-view-after" id="proofAfterWrap">
-          <img id="proofAfterImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=60" alt="Compressed photo after development">
-          <span class="proof-badge badge-after">After</span>
+          <img id="proofAfterImg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=60" alt="Optimized compressed photo">
         </div>
+
+        <!-- Floating Badges -->
+        <span class="proof-badge proof-badge-before">Before</span>
+        <span class="proof-badge proof-badge-after">After</span>
 
         <!-- Split Slider Handle -->
         <div class="proof-slider-line" id="proofSliderLine">
@@ -433,12 +435,12 @@
     <div class="compare-stage" id="compareStage">
       <div class="compare-view-before">
         <img id="compareBeforeImg" alt="Original photo">
-        <span class="compare-badge badge-before">Original</span>
       </div>
       <div class="compare-view-after" id="compareAfterWrap">
         <img id="compareAfterImg" alt="Compressed photo">
-        <span class="compare-badge badge-after">Developed</span>
       </div>
+      <span class="compare-badge compare-badge-before">Original</span>
+      <span class="compare-badge compare-badge-after">Developed</span>
       <div class="compare-slider-line" id="compareSliderLine">
         <div class="compare-slider-thumb">↔</div>
       </div>

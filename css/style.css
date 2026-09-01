@@ -1057,7 +1057,6 @@ input[type="number"]:focus, select:focus {
   clip-path: polygon(var(--proof-split, 50%) 0, 100% 0, 100% 100%, var(--proof-split, 50%) 100%);
   pointer-events: none;
 }
-
 .proof-badge {
   position: absolute;
   top: 16px;
@@ -1070,14 +1069,16 @@ input[type="number"]:focus, select:focus {
   z-index: 5;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   pointer-events: none;
+  display: inline-block;
+  width: auto;
 }
-.proof-badge.badge-before {
+.proof-badge-before {
   left: 16px;
   background: rgba(30, 32, 38, 0.85);
   color: var(--paper);
   border: 1px solid rgba(255,255,255,0.15);
 }
-.proof-badge.badge-after {
+.proof-badge-after {
   right: 16px;
   background: #ff5544;
   color: #ffffff;
@@ -1379,9 +1380,13 @@ input[type="number"]:focus, select:focus {
   border-radius: 2px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  z-index: 5;
+  display: inline-block;
+  width: auto;
+  pointer-events: none;
 }
-.badge-before { right: 14px; background: rgba(21,22,26,0.85); color: var(--paper); }
-.badge-after { left: 14px; background: var(--amber); color: #201509; }
+.compare-badge-before { right: 14px; background: rgba(21,22,26,0.85); color: var(--paper); }
+.compare-badge-after { left: 14px; background: var(--amber); color: #201509; }
 
 .compare-slider-line {
   position: absolute;
