@@ -1277,9 +1277,20 @@
       proofBar.addEventListener('selectstart', (e) => e.preventDefault());
     }
 
+    const statAfter = document.getElementById('proofStatAfter');
+    const statSaved = document.getElementById('proofStatSaved');
+
     function setProofSplit(pct) {
       const clamped = Math.max(0, Math.min(100, pct));
       proofCard.style.setProperty('--proof-split', `${clamped}%`);
+
+      // Dynamically calculate live compressed size & savings percentage based on slider position
+      const qualityFactor = Math.max(0.08, clamped / 100);
+      const estSize = Math.round(95 + qualityFactor * 480);
+      const savedPct = Math.max(5, Math.round((1 - estSize / 700) * 100));
+
+      if (statAfter) statAfter.textContent = `${estSize} KB`;
+      if (statSaved) statSaved.textContent = `(-${savedPct}% lighter)`;
     }
 
     let isProofComparing = false;
