@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fixer — Compress images & build PDFs, right in your browser</title>
+<meta name="description" content="Shrink photos and turn them into a PDF without uploading a single byte. Everything runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sprocket-rail" aria-hidden="true"></div>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="logo" href="#top">
+      <span class="logo-mark">◐</span> Fixer
+    </a>
+    <p class="tag">develops in your browser · nothing leaves your device</p>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="frame-label">roll 01 / frame 01</p>
+      <h1>Shrink the file.<br>Keep the shot.</h1>
+      <p class="hero-sub">Drop in photos, pick how far to compress them, and pull them back out lighter — or stack them straight into one PDF. No uploads, no accounts, no waiting on a server.</p>
+    </div>
+    <div class="hero-figure" aria-hidden="true">
+      <div class="light-table">
+        <div class="neg neg-a"></div>
+        <div class="neg neg-b"></div>
+        <div class="neg neg-c"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workspace wrap" id="workspace">
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" multiple hidden>
+      <div class="dz-inner">
+        <p class="dz-title">Drag photos onto the light table</p>
+        <p class="dz-sub">or</p>
+        <button type="button" class="btn btn-primary" id="browseBtn">Choose files</button>
+        <p class="dz-note">JPG, PNG or WebP. Processed one at a time, locally.</p>
+      </div>
+    </div>
+
+    <div class="controls" id="controls" hidden>
+      <div class="control-group">
+        <label for="quality">Compression <span id="qualityValue">70%</span></label>
+        <input type="range" id="quality" min="10" max="95" value="70" step="5">
+        <p class="control-hint">Lower = smaller file, more visible loss.</p>
+      </div>
+
+      <div class="control-group">
+        <label for="maxWidth">Max width</label>
+        <select id="maxWidth">
+          <option value="0">Original size</option>
+          <option value="2560">2560px</option>
+          <option value="1920" selected>1920px</option>
+          <option value="1280">1280px</option>
+          <option value="800">800px</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="format">Output format</label>
+        <select id="format">
+          <option value="image/jpeg">JPEG</option>
+          <option value="image/webp">WebP</option>
+          <option value="image/png">PNG (lossless)</option>
+        </select>
+      </div>
+
+      <div class="control-actions">
+        <button type="button" class="btn btn-primary" id="compressAllBtn">Develop all</button>
+        <button type="button" class="btn btn-ghost" id="downloadZipBtn" disabled>Download .zip</button>
+        <button type="button" class="btn btn-ghost" id="makePdfBtn" disabled>Stack into PDF</button>
+        <button type="button" class="btn btn-text" id="clearBtn">Clear roll</button>
+      </div>
+    </div>
+
+    <div class="contact-sheet" id="contactSheet" hidden>
+      <div class="sheet-head">
+        <h2>Contact sheet</h2>
+        <p class="sheet-summary" id="sheetSummary"></p>
+      </div>
+      <div class="frames" id="frames"></div>
+    </div>
+
+  </section>
+
+  <section class="how wrap">
+    <h2>How it develops</h2>
+    <ol class="how-steps">
+      <li>
+        <span class="step-no">01</span>
+        <div>
+          <h3>Load</h3>
+          <p>Drop in any number of JPG, PNG or WebP photos. They stay on your machine — nothing is sent anywhere.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-no">02</span>
+        <div>
+          <h3>Set the exposure</h3>
+          <p>Pick a quality level and, optionally, a max width. The browser's own canvas does the re-encoding.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-no">03</span>
+        <div>
+          <h3>Pull the prints</h3>
+          <p>Download each photo, grab the whole batch as a .zip, or stack every frame into a single PDF.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <p>Fixer processes everything locally in your browser. No files are uploaded.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
