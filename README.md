@@ -1,42 +1,182 @@
-# Fixer — image compressor & image-to-PDF
+> [!NOTE]
+> **[Fixer is live on GitHub Pages](https://jojin1709.github.io/fixer/)** — Compress images & compile PDFs right in your browser with zero data uploads.
 
-Fully static, fully client-side. No backend, no build step, no signup. Images never leave the browser.
+<div align="center">
 
-## What it does
-- Drag/drop or pick multiple JPG / PNG / WebP images
-- Compress with adjustable quality, max width, and output format
-- Download each image, download all as a `.zip`, or stack every image into one `.pdf`
+# ◐ Fixer
 
-## Run locally
-Just open `index.html` in a browser — or serve it:
+### In-Browser Image Compressor, HEIC Converter & PDF Stack Builder
+
+**Shrink the file. Keep the shot. 100% private, client-side photo processing powered by HTML5 Canvas.**
+
+[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-24292e?style=for-the-badge&logo=github)](https://jojin1709.github.io/fixer/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-dc9138?style=for-the-badge)](LICENSE)
+[![Zero Backend](https://img.shields.io/badge/Backend-None%20(100%25%20Local)-3c665e?style=for-the-badge)](#privacy--zero-upload-guarantee)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable%20%26%20Offline-f0aa52?style=for-the-badge)](#pwa--offline-mode)
+
+---
+
+<a href="https://jojin1709.github.io/fixer/"><img src="https://img.shields.io/badge/Open%20Live%20App-Fixer-dc9138?style=for-the-badge&logo=googlechrome&logoColor=white" height="38"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/jojin1709/fixer"><img src="https://img.shields.io/badge/GitHub-Repository-1c1d22?style=for-the-badge&logo=github&logoColor=white" height="38"></a>
+
+---
+
+</div>
+
+> [!TIP]
+> **Privacy First:** Fixer executes re-encoding, ZIP compression, and PDF generation entirely inside your browser's local memory sandbox. Your photos never leave your device.
+
+## Table of Contents
+
+- [What is Fixer?](#what-is-fixer)
+- [Why Fixer Exists](#why-fixer-exists)
+- [Key Features](#key-features)
+- [Architecture & Workflow](#architecture--workflow)
+- [Quick Start](#quick-start)
+- [Deployment](#deployment)
+- [PWA & Offline Mode](#pwa--offline-mode)
+- [Privacy & Zero-Upload Guarantee](#privacy--zero-upload-guarantee)
+- [Common Questions](#common-questions)
+- [License](#license)
+
+---
+
+## What is Fixer?
+
+**Fixer** is a client-side web application designed to compress high-resolution images, convert iPhone HEIC/HEIF files, and compile photo contact sheets into multi-page PDF documents without requiring a backend server or subscriptions.
+
+Built with a vintage darkroom visual theme, Fixer uses the browser's native **HTML5 Canvas 2D API** for image re-encoding, **jsPDF** for PDF document compilation, and **JSZip** for bulk archive downloads.
+
+### Why Fixer Exists
+
+Most online image compressors upload your sensitive personal photos, documents, and receipts to third-party cloud servers. This exposes users to privacy risks, bandwidth bottlenecks, and arbitrary upload size caps.
+
+Fixer solves this by doing all the heavy lifting directly on your computer or phone CPU:
+- **Zero latency uploads**: Instant local processing.
+- **Zero cloud storage costs**: Runs indefinitely for free on static hosting.
+- **Total privacy**: Nothing is sent over the network.
+
+---
+
+## Key Features
+
+| Feature | Description |
+|---|---|
+| 🎚️ **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary searches optimal quality to match target KB/MB). |
+| 📱 **iPhone HEIC/HEIF Decoding** | Automatic in-browser decoding and conversion of iOS `.heic` and `.heif` photos to standard web formats via `heic2any`. |
+| 📑 **Drag & Drop PDF Page Stacker** | Reorder contact sheet frames dynamically with drag-and-drop to define custom page order before exporting to PDF. |
+| 🔍 **Interactive Before/After Slider** | Split-view comparison modal to inspect visual compression loss and verify exact file savings in real time. |
+| 📦 **Batch Development & ZIP Export** | Process up to 50 images in a single roll, with individual or bulk `.zip` download support. |
+| 🛡️ **Safety & Error Shields** | Automatic warning on >20MB files and per-image `try/catch` isolation so corrupt files don't halt your batch. |
+| 📶 **PWA & 100% Offline Capability** | Service Worker precaches all core assets and CDN libraries for complete offline functionality. |
+| ♿ **Accessibility Polish** | Keyboard-navigable dropzone, high-contrast focus rings, and screen reader `aria-live` status announcements. |
+| ⚡ **Local Lifetime Savings Tracker** | Client-side `localStorage` counter tracking cumulative megabytes saved across sessions. |
+
+---
+
+## Architecture & Workflow
+
+```text
+  ┌──────────────────────────────────────────────────────────┐
+  │                    User File Drop                        │
+  │     (JPG / PNG / WebP / iPhone HEIC up to 50 files)      │
+  └────────────────────────────┬─────────────────────────────┘
+                               │
+                               ▼
+  ┌──────────────────────────────────────────────────────────┐
+  │           Client-Side Preprocessing & Safety             │
+  │   - >20MB memory warning toast                           │
+  │   - HEIC -> JPEG blob conversion (heic2any)              │
+  └────────────────────────────┬─────────────────────────────┘
+                               │
+                               ▼
+  ┌──────────────────────────────────────────────────────────┐
+  │              Canvas 2D Engine Re-encoding                │
+  │  - Max width proportional downscaling                    │
+  │  - Quality % mode OR Target Size binary search           │
+  │  - Try/catch isolation per frame (fault tolerant)        │
+  └────────────────────────────┬─────────────────────────────┘
+                               │
+            ┌──────────────────┼──────────────────┐
+            ▼                  ▼                  ▼
+     ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+     │ Single File │    │   JSZip     │    │   jsPDF     │
+     │  Download   │    │ Bulk .ZIP   │    │ Stacked PDF │
+     └─────────────┘    └─────────────┘    └─────────────┘
 ```
-npx serve .
-```
 
-## Deploy to Vercel (free)
-**Option A — Vercel dashboard (no CLI, easiest):**
-1. Go to vercel.com → New Project → "Deploy without Git" / drag-and-drop this whole folder.
-2. It auto-detects a static site. Click Deploy. Done — you get a live URL in ~30 seconds.
+---
 
-**Option B — Vercel CLI:**
-```
-npm i -g vercel
+## Quick Start
+
+### Run Locally
+
+Fixer has **zero build steps** and **no npm dependencies**. Simply clone and open `index.html`:
+
+```bash
+# Clone the repository
+git clone https://github.com/jojin1709/fixer.git
+
+# Navigate into directory
 cd fixer
-vercel --prod
+
+# Open directly or serve with any static server:
+npx serve .
+# or
+python3 -m http.server 8080
 ```
 
-**Option C — GitHub:**
-1. Push this folder to a new GitHub repo.
-2. On vercel.com → New Project → Import that repo → Deploy (no config needed, it's static).
+Visit `http://localhost:8080` in your browser.
 
-## Files
-```
-index.html       structure
-css/style.css    styling
-js/app.js        compression, zip, and PDF logic
-```
+---
 
-## Notes
-- Uses the browser's Canvas API for compression — no server, so it scales to unlimited users at $0 cost.
-- Uses jsPDF and JSZip from a public CDN (cdnjs) for the PDF/zip features — loaded at runtime, no install needed.
-- PNG output is lossless (quality slider only affects JPEG/WebP).
+## Deployment
+
+### GitHub Pages (Recommended)
+1. Push this repository to GitHub.
+2. Go to **Settings > Pages**.
+3. Under **Build and deployment**, set **Source** to `Deploy from a branch` (`main` / `/ root`).
+4. Your site will be live at `https://<username>.github.io/fixer/`.
+
+### Vercel / Netlify / Cloudflare Pages
+Fixer is a pure static web app. Drag and drop the folder into the Vercel or Netlify dashboard for instant global CDN deployment.
+
+---
+
+## PWA & Offline Mode
+
+Fixer is configured as a standalone **Progressive Web App**:
+- Click the **Install** icon in Chrome/Edge/Safari address bar to install Fixer as a native desktop or mobile application.
+- The included [sw.js](sw.js) caches all application code, fonts, and external libraries (`jspdf`, `jszip`, `heic2any`) so Fixer works seamlessly even without an internet connection.
+
+---
+
+## Privacy & Zero-Upload Guarantee
+
+> [!IMPORTANT]
+> **No Analytics · No Tracking · No Server Uploads**
+> 
+> All file reading is performed via the browser's native `FileReader` and `URL.createObjectURL()`. All recompression is computed on an off-screen HTML5 `<canvas>`. At no point in time are image bytes transmitted across a network socket.
+
+---
+
+## Common Questions
+
+### How does Target Size Mode work?
+When you set a target size (e.g. `200 KB`), Fixer performs an automated binary search over the Canvas compression quality parameter (from `0.05` to `0.98` across ~7 iterations) until it produces an output blob closest to your specified byte limit.
+
+### Are my images compressed losslessly or lossily?
+- **JPEG & WebP**: Lossy compression with user-defined quality factor and optional max width downscaling.
+- **PNG**: Lossless re-encoding (preserves full alpha transparency; dimension resizing can still reduce file size).
+
+### Why does Fixer warn on files larger than 20MB?
+Browsers allocate uncompressed RGBA pixel buffers in RAM for each Canvas operation (a 24-megapixel photo requires ~96MB of raw RAM). The 20MB warning is a safeguard to prevent browser tabs from freezing on mobile or lower-spec devices.
+
+---
+
+## License
+
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
+
+<p align="center">
+  <b>Developed with ◐ by <a href="https://github.com/jojin1709">jojin1709</a></b>
+</p>
