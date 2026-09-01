@@ -1029,6 +1029,7 @@ input[type="number"]:focus, select:focus {
 }
 
 .proof-stage {
+  --proof-split: 50%;
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -1042,7 +1043,9 @@ input[type="number"]:focus, select:focus {
 
 .proof-view-before, .proof-view-after {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 .proof-view-before img, .proof-view-after img {
   width: 100%;
@@ -1051,9 +1054,8 @@ input[type="number"]:focus, select:focus {
   display: block;
 }
 .proof-view-after {
-  overflow: hidden;
-  width: 50%;
-  border-right: 2px solid #ffffff;
+  clip-path: polygon(var(--proof-split, 50%) 0, 100% 0, 100% 100%, var(--proof-split, 50%) 100%);
+  pointer-events: none;
 }
 
 .proof-badge {
@@ -1067,6 +1069,7 @@ input[type="number"]:focus, select:focus {
   letter-spacing: 0.03em;
   z-index: 5;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  pointer-events: none;
 }
 .proof-badge.badge-before {
   left: 16px;
@@ -1082,8 +1085,9 @@ input[type="number"]:focus, select:focus {
 
 .proof-slider-line {
   position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
+  top: 0;
+  bottom: 0;
+  left: var(--proof-split, 50%);
   width: 2px;
   background: #ffffff;
   transform: translateX(-50%);
@@ -1093,9 +1097,11 @@ input[type="number"]:focus, select:focus {
 
 .proof-slider-thumb {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 38px; height: 38px;
+  width: 38px;
+  height: 38px;
   background: #1e2026;
   border: 2px solid #ffffff;
   color: #ffffff;
@@ -1334,6 +1340,7 @@ input[type="number"]:focus, select:focus {
 .btn-close:hover { color: var(--text-hi); background: var(--line-soft); }
 
 .compare-stage {
+  --compare-split: 50%;
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -1346,7 +1353,9 @@ input[type="number"]:focus, select:focus {
 }
 .compare-view-before, .compare-view-after {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1357,9 +1366,8 @@ input[type="number"]:focus, select:focus {
   object-fit: contain;
 }
 .compare-view-after {
-  overflow: hidden;
-  width: 50%;
-  border-right: 2px solid var(--amber);
+  clip-path: polygon(var(--compare-split, 50%) 0, 100% 0, 100% 100%, var(--compare-split, 50%) 100%);
+  pointer-events: none;
 }
 .compare-badge {
   position: absolute;
@@ -1377,8 +1385,9 @@ input[type="number"]:focus, select:focus {
 
 .compare-slider-line {
   position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
+  top: 0;
+  bottom: 0;
+  left: var(--compare-split, 50%);
   width: 2px;
   background: var(--amber);
   transform: translateX(-50%);
@@ -1386,9 +1395,11 @@ input[type="number"]:focus, select:focus {
 }
 .compare-slider-thumb {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 28px; height: 28px;
+  width: 28px;
+  height: 28px;
   background: var(--amber);
   color: #201509;
   font-size: 0.75rem;

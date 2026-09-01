@@ -1027,8 +1027,7 @@
 
   function setCompareSplit(pct) {
     const clamped = Math.max(0, Math.min(100, pct));
-    compareAfterWrap.style.width = `${clamped}%`;
-    compareSliderLine.style.left = `${clamped}%`;
+    compareStage.style.setProperty('--compare-split', `${clamped}%`);
   }
 
   let isComparing = false;
@@ -1278,8 +1277,7 @@
 
     function setProofSplit(pct) {
       const clamped = Math.max(0, Math.min(100, pct));
-      proofAfterWrap.style.width = `${clamped}%`;
-      proofSliderLine.style.left = `${clamped}%`;
+      proofStage.style.setProperty('--proof-split', `${clamped}%`);
     }
 
     let isProofComparing = false;
