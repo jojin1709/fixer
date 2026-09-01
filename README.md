@@ -32,8 +32,7 @@
 - [Why Fixer Exists](#why-fixer-exists)
 - [Key Features](#key-features)
 - [Architecture & Workflow](#architecture--workflow)
-- [Quick Start](#quick-start)
-- [Deployment](#deployment)
+- [Use Fixer Live](#use-fixer-live)
 - [PWA & Offline Mode](#pwa--offline-mode)
 - [Privacy & Zero-Upload Guarantee](#privacy--zero-upload-guarantee)
 - [Common Questions](#common-questions)
@@ -108,39 +107,16 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 
 ---
 
-## Quick Start
+## Use Fixer Live
 
-### Run Locally
+Fixer is fully deployed and accessible in any modern desktop or mobile browser. No installation, signup, or command-line setup is required:
 
-Fixer has **zero build steps** and **no npm dependencies**. Simply clone and open `index.html`:
+👉 **[Launch Fixer at jojin1709.github.io/fixer](https://jojin1709.github.io/fixer/)**
 
-```bash
-# Clone the repository
-git clone https://github.com/jojin1709/fixer.git
-
-# Navigate into directory
-cd fixer
-
-# Open directly or serve with any static server:
-npx serve .
-# or
-python3 -m http.server 8080
-```
-
-Visit `http://localhost:8080` in your browser.
-
----
-
-## Deployment
-
-### GitHub Pages (Recommended)
-1. Push this repository to GitHub.
-2. Go to **Settings > Pages**.
-3. Under **Build and deployment**, set **Source** to `Deploy from a branch` (`main` / `/ root`).
-4. Your site will be live at `https://<username>.github.io/fixer/`.
-
-### Vercel / Netlify / Cloudflare Pages
-Fixer is a pure static web app. Drag and drop the folder into the Vercel or Netlify dashboard for instant global CDN deployment.
+1. Open the URL above.
+2. Drag and drop your photos (JPG, PNG, WebP, or iPhone HEIC).
+3. Adjust quality or set your target size in KB.
+4. Download compressed files, bulk ZIP, or stack everything into a single PDF.
 
 ---
 
