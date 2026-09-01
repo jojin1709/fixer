@@ -11,7 +11,7 @@
 
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-24292e?style=for-the-badge&logo=github)](https://jojin1709.github.io/fixer/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-JOJIN%20JOHN-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jojin-john/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-dc9138?style=for-the-badge)](LICENSE)
+[![License: All Rights Reserved](https://img.shields.io/badge/License-All%20Rights%20Reserved-dc9138?style=for-the-badge)](LICENSE)
 [![Zero Backend](https://img.shields.io/badge/Backend-None%20(100%25%20Local)-3c665e?style=for-the-badge)](#privacy--zero-upload-guarantee)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable%20%26%20Offline-f0aa52?style=for-the-badge)](#pwa--offline-mode)
 
@@ -179,7 +179,9 @@ Developed by **[JOJIN JOHN](https://www.linkedin.com/in/jojin-john/)**
 
 ## License
 
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
+Copyright © 2026 **JOJIN JOHN**. All Rights Reserved.
+
+This project and its source code are proprietary. No unauthorized copying, cloning, redistribution, or commercial re-hosting is permitted. You may freely use the live web application at **[https://jojin1709.github.io/fixer/](https://jojin1709.github.io/fixer/)**. See [LICENSE](LICENSE) for full terms.
 
 <p align="center">
   <b>Fixer — Developed by <a href="https://www.linkedin.com/in/jojin-john/">JOJIN JOHN</a></b>
