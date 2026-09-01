@@ -45,7 +45,7 @@
 
 **Fixer** is a client-side web application designed to compress high-resolution images, convert iPhone HEIC/HEIF files, and compile photo contact sheets into multi-page PDF documents without requiring a backend server or subscriptions.
 
-Built with a vintage darkroom visual theme, Fixer uses the browser's native **HTML5 Canvas 2D API** for image re-encoding, **jsPDF** for PDF document compilation, and **JSZip** for bulk archive downloads.
+Built with a dark darkroom visual aesthetic, Fixer uses the browser's native **HTML5 Canvas 2D API** for image re-encoding, **jsPDF** for PDF document compilation, and **JSZip** for bulk archive downloads.
 
 ### Why Fixer Exists
 
@@ -62,19 +62,20 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 
 | Feature | Description |
 |---|---|
-| 🎚️ **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary searches optimal quality to match target KB/MB). |
-| 🔄 **Image Rotate & Flip** | Rotate 90° left/right and flip horizontally directly on each frame before developing or exporting to PDF. |
-| ✂️ **Aspect Ratio Cropper** | Built-in photo cropper with Freeform, 1:1 Square, 4:5 Instagram, 16:9 Banner, and 4:3 Photo presets. |
-| 🏷️ **Custom Text Watermarking** | Stamp customizable text watermarks (position, opacity, font size) directly onto photos during compression. |
-| 📋 **One-Click Copy to Clipboard** | Copy developed photos straight to your system clipboard to paste directly into WhatsApp, Discord, or Slack. |
-| 📑 **Advanced PDF Stack Builder** | Configure page orientation (Auto/Portrait/Landscape), custom layouts (1-fit, 1-fill, 2×2 grid, 3×3 grid), margins, and page numbers. |
-| 📱 **iPhone HEIC/HEIF Decoding** | Automatic in-browser decoding and conversion of iOS `.heic` and `.heif` photos to standard web formats via `heic2any`. |
-| 🚀 **AVIF Format Support** | Next-generation AVIF export for superior compression ratios alongside WebP, JPEG, and lossless PNG. |
-| 🔒 **100% EXIF Privacy Shield** | In-browser canvas sandbox automatically purges all embedded GPS coordinates, camera serials, and device metadata. |
-| 🔍 **Interactive Before/After Slider** | Split-view comparison modal to inspect visual compression loss and verify exact file savings in real time. |
-| 📦 **Batch Development & ZIP Export** | Process up to 50 images in a single roll, with individual or bulk `.zip` download support. |
-| 📶 **PWA & 100% Offline Capability** | Service Worker precaches all core assets and CDN libraries for complete offline functionality. |
-| ⚡ **Local Lifetime Savings Tracker** | Client-side `localStorage` counter tracking cumulative megabytes saved across sessions. |
+| **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary searches optimal quality to match target KB/MB). |
+| **Interactive Visual Quality Proof** | Real-time split-screen comparison slider demonstrating zero perceptible quality drop with live file-size calculation. |
+| **Quick Image Rotate & Flip** | Rotate 90° left/right and flip horizontally directly on each frame before developing or exporting. |
+| **Aspect Ratio Cropper** | Built-in photo cropper with Freeform, 1:1 Square, 4:5 Instagram, 16:9 Banner, and 4:3 Photo presets. |
+| **Custom Text Watermarking** | Stamp customizable text watermarks (position, opacity, font size) directly onto photos during compression. |
+| **One-Click Copy to Clipboard** | Copy developed photos straight to your system clipboard to paste directly into WhatsApp, Discord, or Slack. |
+| **Advanced PDF Stack Builder** | Configure page orientation (Auto/Portrait/Landscape), custom layouts (1-fit, 1-fill, 2×2 grid, 3×3 grid), margins, and page numbers. |
+| **iPhone HEIC/HEIF Decoding** | Automatic in-browser decoding and conversion of iOS `.heic` and `.heif` photos to standard web formats via `heic2any`. |
+| **AVIF Next-Gen Format Support** | Next-generation AVIF export for superior compression ratios alongside WebP, JPEG, and lossless PNG. |
+| **EXIF Privacy Shield** | In-browser canvas sandbox automatically purges all embedded GPS coordinates, camera serials, and device metadata. |
+| **Interactive Before/After Slider** | Split-view comparison modal to inspect visual compression loss and verify exact file savings in real time. |
+| **Batch Development & ZIP Export** | Process up to 50 images in a single roll, with individual or bulk `.zip` download support. |
+| **PWA & 100% Offline Capability** | Service Worker precaches all core assets and CDN libraries for complete offline functionality. |
+| **Local Lifetime Savings Tracker** | Client-side `localStorage` counter tracking cumulative megabytes saved across sessions. |
 
 ---
 
@@ -83,7 +84,7 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 ```text
   ┌──────────────────────────────────────────────────────────┐
   │                    User File Drop                        │
-  │     (JPG / PNG / WebP / iPhone HEIC up to 50 files)      │
+  │     (JPG / PNG / WebP / AVIF / HEIC up to 50 files)      │
   └────────────────────────────┬─────────────────────────────┘
                                │
                                ▼
@@ -91,34 +92,36 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
   │           Client-Side Preprocessing & Safety             │
   │   - >20MB memory warning toast                           │
   │   - HEIC -> JPEG blob conversion (heic2any)              │
+  │   - Aspect ratio crop & transform matrices               │
   └────────────────────────────┬─────────────────────────────┘
                                │
                                ▼
   ┌──────────────────────────────────────────────────────────┐
   │              Canvas 2D Engine Re-encoding                │
-  │  - Max width proportional downscaling                    │
+  │  - Proportional downscaling                              │
   │  - Quality % mode OR Target Size binary search           │
+  │  - Watermark overlay & EXIF metadata purge               │
   │  - Try/catch isolation per frame (fault tolerant)        │
   └────────────────────────────┬─────────────────────────────┘
                                │
-            ┌──────────────────┼──────────────────┐
-            ▼                  ▼                  ▼
-     ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-     │ Single File │    │   JSZip     │    │   jsPDF     │
-     │  Download   │    │ Bulk .ZIP   │    │ Stacked PDF │
-     └─────────────┘    └─────────────┘    └─────────────┘
+             ┌─────────────────┼─────────────────┐
+             ▼                 ▼                 ▼
+      ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+      │ Single File │   │   JSZip     │   │   jsPDF     │
+      │  Download   │   │ Bulk .ZIP   │   │ Stacked PDF │
+      └─────────────┘   └─────────────┘   └─────────────┘
 ```
 
 ---
 
 ## Use Fixer Live
 
-Fixer is fully deployed and accessible in any modern desktop or mobile browser. No installation, signup, or command-line setup is required:
+Fixer is fully deployed and accessible in any modern desktop or mobile browser. No installation, signup, or setup is required:
 
 👉 **[Launch Fixer at jojin1709.github.io/fixer](https://jojin1709.github.io/fixer/)**
 
 1. Open the URL above.
-2. Drag and drop your photos (JPG, PNG, WebP, or iPhone HEIC).
+2. Drag and drop your photos (JPG, PNG, WebP, AVIF, or iPhone HEIC).
 3. Adjust quality or set your target size in KB.
 4. Download compressed files, bulk ZIP, or stack everything into a single PDF.
 
@@ -147,18 +150,20 @@ Fixer is configured as a standalone **Progressive Web App**:
 When you set a target size (e.g. `200 KB`), Fixer performs an automated binary search over the Canvas compression quality parameter (from `0.05` to `0.98` across ~7 iterations) until it produces an output blob closest to your specified byte limit.
 
 ### Are my images compressed losslessly or lossily?
-- **JPEG & WebP**: Lossy compression with user-defined quality factor and optional max width downscaling.
+- **JPEG, WebP & AVIF**: Lossy compression with user-defined quality factor and optional max width downscaling.
 - **PNG**: Lossless re-encoding (preserves full alpha transparency; dimension resizing can still reduce file size).
 
 ### Why does Fixer warn on files larger than 20MB?
 Browsers allocate uncompressed RGBA pixel buffers in RAM for each Canvas operation (a 24-megapixel photo requires ~96MB of raw RAM). The 20MB warning is a safeguard to prevent browser tabs from freezing on mobile or lower-spec devices.
 
+---
+
 ## Developer
 
-Developed with ◐ by **[JOJIN JOHN](https://www.linkedin.com/in/jojin-john/)**
+Developed by **[JOJIN JOHN](https://www.linkedin.com/in/jojin-john/)**
 
-- 💼 **LinkedIn**: [linkedin.com/in/jojin-john](https://www.linkedin.com/in/jojin-john/)
-- 🐙 **GitHub**: [@jojin1709](https://github.com/jojin1709)
+- **LinkedIn**: [linkedin.com/in/jojin-john](https://www.linkedin.com/in/jojin-john/)
+- **GitHub**: [@jojin1709](https://github.com/jojin1709)
 
 ---
 
