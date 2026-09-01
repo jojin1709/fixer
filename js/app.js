@@ -1263,29 +1263,6 @@
     makePdfBtn.disabled = doneCount === 0;
   }
 
-  // ---- Hero Light Table Image & PDF Cycling ----
-  function initHeroNegRotator() {
-    const setupRotator = (containerId, intervalMs) => {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      const mediaList = container.querySelectorAll('.neg-media');
-      if (mediaList.length <= 1) return;
-      let activeIndex = 0;
-
-      setInterval(() => {
-        mediaList[activeIndex].classList.remove('active');
-        activeIndex = (activeIndex + 1) % mediaList.length;
-        mediaList[activeIndex].classList.add('active');
-      }, intervalMs);
-    };
-
-    setupRotator('heroNegA', 4200); // 35mm film negative
-    setupRotator('heroNegB', 5000); // PDF document stack & contact sheet
-    setupRotator('heroNegC', 3600); // Warm amber slide
-  }
-
-  initHeroNegRotator();
-
   // ---- Visual Proof Showcase Slider ----
   function initVisualProofSlider() {
     const proofCard = document.querySelector('.proof-card');
