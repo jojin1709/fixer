@@ -582,12 +582,21 @@ main { padding-left: 14px; }
   color: var(--text-low);
   line-height: 1.4;
 }
+.control-hint code {
+  font-family: var(--font-display);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--amber);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.74rem;
+}
+
 input[type="range"] {
   width: 100%;
   accent-color: var(--amber);
   cursor: pointer;
 }
-input[type="number"], select {
+input[type="text"], input[type="number"], select {
   width: 100%;
   background: var(--ink);
   color: var(--text-hi);
@@ -595,10 +604,13 @@ input[type="number"], select {
   border-radius: var(--radius);
   padding: 10px 12px;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-input[type="number"]:focus, select:focus {
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
   border-color: var(--amber);
+  box-shadow: 0 0 0 2px rgba(220, 145, 56, 0.2);
   outline: none;
 }
 
