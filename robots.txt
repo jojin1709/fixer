@@ -1,4 +1,101 @@
+# =======================================================
+# Fixer - Robots.txt for Global Search Engine Indexing
+# Developed by JOJIN JOHN
+# Website: https://jojin1709.github.io/fixer/
+# =======================================================
+
+# Allow All Search Engine Crawlers
 User-agent: *
 Allow: /
+Crawl-delay: 0
 
+# Google Web & Image Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+# Microsoft Bing & Yahoo
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Privacy & Mobile Search Engines
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Qwantify
+Allow: /
+
+# International Search Engines
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Sogou
+Allow: /
+
+User-agent: NaverBot
+Allow: /
+
+# Social Media Previews & Crawlers
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: SkypeUriPreview
+Allow: /
+
+# AI & Semantic Search Indexers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Sitemap Location & Host
 Sitemap: https://jojin1709.github.io/fixer/sitemap.xml
+Host: https://jojin1709.github.io
