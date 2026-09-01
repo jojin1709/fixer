@@ -189,8 +189,41 @@
         <select id="format">
           <option value="image/jpeg">JPEG</option>
           <option value="image/webp">WebP</option>
+          <option value="image/avif">AVIF (Next-Gen)</option>
           <option value="image/png">PNG (lossless)</option>
         </select>
+      </div>
+
+      <!-- Watermark & Privacy Section -->
+      <div class="control-group watermark-group">
+        <label for="enableWatermark" class="toggle-label">
+          <input type="checkbox" id="enableWatermark">
+          <span>🏷️ Add Text Watermark</span>
+        </label>
+        <div class="watermark-options" id="watermarkOptions" hidden>
+          <input type="text" id="watermarkText" placeholder="e.g. © Fixer Photo" maxlength="40" aria-label="Watermark text">
+          <div class="watermark-row">
+            <select id="watermarkPos" aria-label="Watermark position">
+              <option value="bottom-right" selected>Bottom-Right</option>
+              <option value="bottom-left">Bottom-Left</option>
+              <option value="center">Center</option>
+              <option value="top-right">Top-Right</option>
+            </select>
+            <select id="watermarkOpacity" aria-label="Watermark opacity">
+              <option value="0.3">30% Opacity</option>
+              <option value="0.6" selected>60% Opacity</option>
+              <option value="0.9">90% Opacity</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group privacy-group">
+        <label class="toggle-label">
+          <input type="checkbox" id="stripExif" checked disabled>
+          <span>🔒 EXIF / GPS stripped automatically</span>
+        </label>
+        <p class="control-hint">Canvas sandbox purges all location & device metadata.</p>
       </div>
 
       <div class="control-actions">
@@ -216,7 +249,7 @@
       <div class="sheet-head">
         <div>
           <h2>Contact sheet</h2>
-          <p class="sheet-hint">💡 Drag and drop frame cards to reorder pages for PDF stack.</p>
+          <p class="sheet-hint">💡 Drag & drop to reorder · Use ⟲ ⟳ ⇄ to rotate/flip · ✂️ to crop</p>
         </div>
         <p class="sheet-summary" id="sheetSummary"></p>
       </div>
@@ -231,8 +264,8 @@
       <li>
         <span class="step-no">01</span>
         <div>
-          <h3>Load</h3>
-          <p>Drop in any number of JPG, PNG, WebP, or iPhone HEIC photos. They stay on your machine — nothing is sent anywhere.</p>
+          <h3>Load & Edit</h3>
+          <p>Drop in JPG, PNG, WebP, AVIF, or HEIC photos. Rotate, flip, crop to custom ratios, or watermark directly.</p>
         </div>
       </li>
       <li>
@@ -246,13 +279,100 @@
         <span class="step-no">03</span>
         <div>
           <h3>Pull the prints</h3>
-          <p>Download individually, compare original vs fixed side-by-side, grab a .zip, or reorder & stack into a PDF.</p>
+          <p>Copy to clipboard with one click, download individually, grab a .zip, or configure & stack into a custom PDF.</p>
         </div>
       </li>
     </ol>
   </section>
 
 </main>
+
+<!-- PDF Options Modal -->
+<div class="app-modal" id="pdfOptionsModal" hidden role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <div>
+        <h3 id="pdfModalTitle">📄 PDF Stack Settings</h3>
+        <p class="modal-sub">Configure page orientation, layout, and margins</p>
+      </div>
+      <button type="button" class="btn-close" id="closePdfModalBtn" aria-label="Close PDF options dialog">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-group">
+        <label for="pdfOrientation">Page Orientation</label>
+        <select id="pdfOrientation">
+          <option value="auto" selected>Auto-fit (matches image)</option>
+          <option value="portrait">Portrait</option>
+          <option value="landscape">Landscape</option>
+        </select>
+      </div>
+      <div class="modal-group">
+        <label for="pdfLayout">Page Layout</label>
+        <select id="pdfLayout">
+          <option value="1-fit" selected>1 photo per page (Fit to page)</option>
+          <option value="1-fill">1 photo per page (Full bleed)</option>
+          <option value="grid-2x2">Contact Sheet (2 × 2 Grid)</option>
+          <option value="grid-3x3">Contact Sheet (3 × 3 Grid)</option>
+        </select>
+      </div>
+      <div class="modal-group">
+        <label for="pdfMargin">Page Margins</label>
+        <select id="pdfMargin">
+          <option value="0">None (0pt borderless)</option>
+          <option value="20" selected>Clean (20pt)</option>
+          <option value="40">Wide (40pt)</option>
+        </select>
+      </div>
+      <div class="modal-group">
+        <label class="toggle-label">
+          <input type="checkbox" id="pdfPageNumbers" checked>
+          <span>Include page numbers in footer</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" id="cancelPdfModalBtn">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirmBuildPdfBtn">Build & Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Crop Modal -->
+<div class="app-modal" id="cropModal" hidden role="dialog" aria-modal="true" aria-labelledby="cropModalTitle">
+  <div class="modal-dialog crop-dialog">
+    <div class="modal-header">
+      <div>
+        <h3 id="cropModalTitle">✂️ Crop Photo</h3>
+        <p class="modal-sub" id="cropModalSub">Select aspect ratio and adjust crop box</p>
+      </div>
+      <button type="button" class="btn-close" id="closeCropModalBtn" aria-label="Close crop dialog">✕</button>
+    </div>
+    <div class="crop-ratios">
+      <button type="button" class="ratio-btn active" data-ratio="free">Freeform</button>
+      <button type="button" class="ratio-btn" data-ratio="1:1">1:1 Square</button>
+      <button type="button" class="ratio-btn" data-ratio="4:5">4:5 Insta</button>
+      <button type="button" class="ratio-btn" data-ratio="16:9">16:9 Banner</button>
+      <button type="button" class="ratio-btn" data-ratio="4:3">4:3 Classic</button>
+    </div>
+    <div class="crop-viewport" id="cropViewport">
+      <img id="cropTargetImg" alt="Crop target">
+      <div class="crop-box" id="cropBox">
+        <div class="crop-grid-line h1"></div>
+        <div class="crop-grid-line h2"></div>
+        <div class="crop-grid-line v1"></div>
+        <div class="crop-grid-line v2"></div>
+        <div class="crop-handle handle-nw" data-handle="nw"></div>
+        <div class="crop-handle handle-ne" data-handle="ne"></div>
+        <div class="crop-handle handle-sw" data-handle="sw"></div>
+        <div class="crop-handle handle-se" data-handle="se"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" id="cancelCropBtn">Cancel</button>
+      <button type="button" class="btn btn-primary" id="applyCropBtn">Apply Crop</button>
+    </div>
+  </div>
+</div>
 
 <!-- Before / After Compare Modal -->
 <div class="compare-modal" id="compareModal" hidden role="dialog" aria-modal="true" aria-labelledby="compareTitle">

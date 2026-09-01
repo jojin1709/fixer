@@ -63,13 +63,17 @@ Fixer solves this by doing all the heavy lifting directly on your computer or ph
 | Feature | Description |
 |---|---|
 | 🎚️ **Dual Compression Modes** | Choose between standard **Quality Percentage (10% - 95%)** or **Target File Size Mode** (binary searches optimal quality to match target KB/MB). |
+| 🔄 **Image Rotate & Flip** | Rotate 90° left/right and flip horizontally directly on each frame before developing or exporting to PDF. |
+| ✂️ **Aspect Ratio Cropper** | Built-in photo cropper with Freeform, 1:1 Square, 4:5 Instagram, 16:9 Banner, and 4:3 Photo presets. |
+| 🏷️ **Custom Text Watermarking** | Stamp customizable text watermarks (position, opacity, font size) directly onto photos during compression. |
+| 📋 **One-Click Copy to Clipboard** | Copy developed photos straight to your system clipboard to paste directly into WhatsApp, Discord, or Slack. |
+| 📑 **Advanced PDF Stack Builder** | Configure page orientation (Auto/Portrait/Landscape), custom layouts (1-fit, 1-fill, 2×2 grid, 3×3 grid), margins, and page numbers. |
 | 📱 **iPhone HEIC/HEIF Decoding** | Automatic in-browser decoding and conversion of iOS `.heic` and `.heif` photos to standard web formats via `heic2any`. |
-| 📑 **Drag & Drop PDF Page Stacker** | Reorder contact sheet frames dynamically with drag-and-drop to define custom page order before exporting to PDF. |
+| 🚀 **AVIF Format Support** | Next-generation AVIF export for superior compression ratios alongside WebP, JPEG, and lossless PNG. |
+| 🔒 **100% EXIF Privacy Shield** | In-browser canvas sandbox automatically purges all embedded GPS coordinates, camera serials, and device metadata. |
 | 🔍 **Interactive Before/After Slider** | Split-view comparison modal to inspect visual compression loss and verify exact file savings in real time. |
 | 📦 **Batch Development & ZIP Export** | Process up to 50 images in a single roll, with individual or bulk `.zip` download support. |
-| 🛡️ **Safety & Error Shields** | Automatic warning on >20MB files and per-image `try/catch` isolation so corrupt files don't halt your batch. |
 | 📶 **PWA & 100% Offline Capability** | Service Worker precaches all core assets and CDN libraries for complete offline functionality. |
-| ♿ **Accessibility Polish** | Keyboard-navigable dropzone, high-contrast focus rings, and screen reader `aria-live` status announcements. |
 | ⚡ **Local Lifetime Savings Tracker** | Client-side `localStorage` counter tracking cumulative megabytes saved across sessions. |
 
 ---
